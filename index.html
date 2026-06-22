@@ -63,7 +63,10 @@
 
         .particles {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0; left: 0; width: 100%; height height: 100%;
+            z-index: -1;
+            overflow: hidden;
+: 100%;
             z-index: -1;
             overflow: hidden;
             pointer-events: none;
@@ -682,12 +685,42 @@
 
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(0); opacity: 11; }
         }
 
         .toast.success { background: rgba(34, 197, 94, 0.1); color: var(--success); border-color: rgba(34, 197, 94, 0.2); }
         .toast.error { background: rgba(239, 68, 68, 0.1); color: var(--danger); border-color: rgba(239, 68, 68, 0.2); }
         .toast.info { background: rgba(99, 102, 241, 0.1); color: var(--primary-light); border-color: rgba(99, 102, 241, 0.2); }
+
+        .api-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .api-chip {
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .api-chip.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .api-chip:hover:not(.active) {
+            border-color: var(--border-hover);
+            color: var(--text);
+        }
 
         @media (max-width: 640px) {
             .container { padding: 16px; }
@@ -720,7 +753,7 @@
         </div>
         <div class="status-badge">
             <div class="status-dot"></div>
-            <span id="connectionStatus">API Ready</span>
+            <span id="connectionStatus">Ready</span>
         </div>
     </header>
 
@@ -731,6 +764,13 @@
         </div>
 
         <div class="email-card">
+            <div class="email-label">Select API Provider</div>
+            <div class="api-selector" id="apiSelector">
+                <div class="api-chip active" onclick="switchApi('1secmail')" id="chip-1secmail">1SecMail</div>
+                <div class="api-chip" onclick="switchApi('mailtm')" id="chip-mailtm">Mail.tm</div>
+                <div class="api-chip" onclick="switchApi('cors')" id="chip-cors">CORS Proxy</div>
+            </div>
+
             <div class="email-label">Your Email Address</div>
             <div class="email-display">
                 <div class="email-address" id="emailAddress">Click "Generate Email" to create your inbox</div>
@@ -790,11 +830,33 @@
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
-        const API_BASE = 'https://www.1secmail.com/api/v1';
-        
+        // ==================== CONFIG ====================
+        const API_PROVIDERS = {
+            '1secmail': {
+                base: 'https://www.1secmail.com/api/v1',
+                cors: true,
+                type: '1secmail'
+            },
+            'mailtm': {
+                base: 'https://api.mail.tm',
+                cors: true,
+                type: 'mailtm'
+            },
+            'cors': {
+                base: 'https://api.allorigins.win/raw?url=',
+                target: 'https://www.1secmail.com/api/v1',
+                cors: true,
+                type: 'cors'
+            }
+        };
+
+        let currentProvider = '1secmail';
         let currentEmail = null;
         let messages = [];
+        let mailtmAccount = null;
+        let mailtmToken = null;
 
+        // ==================== INIT ====================
         document.addEventListener('DOMContentLoaded', () => {
             createParticles();
             loadSavedEmail();
@@ -813,30 +875,45 @@
             }
         }
 
+        function switchApi(provider) {
+            currentProvider = provider;
+            document.querySelectorAll('.api-chip').forEach(c => c.classList.remove('active'));
+            document.getElementById('chip-' + provider).classList.add('active');
+            showToast('Switched to ' + provider, 'info');
+        }
+
+        // ==================== FETCH WITH CORS HANDLING ====================
+        async function fetchWithCors(url, options = {}) {
+            try {
+                const res = await fetch(url, options);
+                if (res.ok) return res;
+                throw new Error('HTTP ' + res.status);
+            } catch (err) {
+                // If direct fetch fails, try CORS proxy
+                if (currentProvider !== 'cors') {
+                    showToast('Direct fetch blocked, trying CORS proxy...', 'info');
+                    const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+                    const proxyRes = await fetch(proxyUrl, options);
+                    if (proxyRes.ok) return proxyRes;
+                }
+                throw err;
+            }
+        }
+
+        // ==================== GENERATE EMAIL ====================
         async function generateEmail() {
             const btn = document.getElementById('generateBtn');
             btn.disabled = true;
             btn.innerHTML = '<div class="loading-spinner"></div><span>Creating...</span>';
 
             try {
-                const username = 'user' + Math.random().toString(36).substring(2, 10);
-                const domains = ['1secmail.com', '1secmail.org', '1secmail.net'];
-                const domain = domains[Math.floor(Math.random() * domains.length)];
-                const email = `${username}@${domain}`;
-
-                currentEmail = email;
-                localStorage.setItem('tempmail_email', email);
-                messages = [];
-
-                document.getElementById('emailAddress').textContent = email;
-                document.getElementById('copyBtn').disabled = false;
-                document.getElementById('refreshBtn').disabled = false;
-                document.getElementById('deleteBtn').disabled = false;
-
-                showToast('Email created: ' + email, 'success');
-                await refreshInbox();
-
+                if (currentProvider === 'mailtm') {
+                    await generateMailtmEmail();
+                } else {
+                    await generate1secmailEmail();
+                }
             } catch (err) {
+                console.error(err);
                 showToast('Failed: ' + err.message, 'error');
             } finally {
                 btn.disabled = false;
@@ -844,20 +921,111 @@
             }
         }
 
-        function loadSavedEmail() {
-            const saved = localStorage.getItem('tempmail_email');
-            if (!saved) return;
+        async function generate1secmailEmail() {
+            const username = 'user' + Math.random().toString(36).substring(2, 10);
+            const domains = ['1secmail.com', '1secmail.org', '1secmail.net'];
+            const domain = domains[Math.floor(Math.random() * domains.length)];
+            const email = `${username}@${domain}`;
 
-            currentEmail = saved;
+            currentEmail = email;
+            mailtmAccount = null;
+            mailtmToken = null;
+            localStorage.setItem('tempmail_email', email);
+            localStorage.setItem('tempmail_provider', '1secmail');
+            messages = [];
+
+            updateUIForEmail();
+            showToast('Email created: ' + email, 'success');
+            await refreshInbox();
+        }
+
+        async function generateMailtmEmail() {
+            const API_BASE = 'https://api.mail.tm';
+            
+            // Get domains
+            const domainsRes = await fetch(`${API_BASE}/domains`);
+            const domainsData = await domainsRes.json();
+            let domainList = [];
+            if (Array.isArray(domainsData)) domainList = domainsData;
+            else if (domainsData['hydra:member']) domainList = domainsData['hydra:member'];
+            
+            if (domainList.length === 0) throw new Error('No domains available');
+            
+            const domain = domainList[0].domain;
+            const username = 'user' + Math.random().toString(36).substring(2, 10) + Date.now().toString(36).substring(0, 4);
+            const address = `${username}@${domain}`;
+            const password = Math.random().toString(36).substring(2, 15);
+
+            // Create account
+            const accRes = await fetch(`${API_BASE}/accounts`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ address, password })
+            });
+            mailtmAccount = await accRes.json();
+
+            // Get token
+            const tokenRes = await fetch(`${API_BASE}/token`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ address, password })
+            });
+            const tokenData = await tokenRes.json();
+            mailtmToken = tokenData.token;
+
+            currentEmail = address;
+            localStorage.setItem('tempmail_email', address);
+            localStorage.setItem('tempmail_provider', 'mailtm');
+            localStorage.setItem('tempmail_mailtm', JSON.stringify({
+                id: mailtmAccount.id,
+                address: address,
+                password: password,
+                token: mailtmToken
+            }));
+            messages = [];
+
+            updateUIForEmail();
+            showToast('Email created: ' + address, 'success');
+            await refreshInbox();
+        }
+
+        function updateUIForEmail() {
             document.getElementById('emailAddress').textContent = currentEmail;
             document.getElementById('copyBtn').disabled = false;
             document.getElementById('refreshBtn').disabled = false;
             document.getElementById('deleteBtn').disabled = false;
+        }
+
+        // ==================== LOAD SAVED ====================
+        function loadSavedEmail() {
+            const saved = localStorage.getItem('tempmail_email');
+            const savedProvider = localStorage.getItem('tempmail_provider') || '1secmail';
             
+            if (!saved) return;
+
+            currentEmail = saved;
+            currentProvider = savedProvider;
+            
+            // Update UI chips
+            document.querySelectorAll('.api-chip').forEach(c => c.classList.remove('active'));
+            document.getElementById('chip-' + savedProvider)?.classList.add('active');
+
+            // Restore mailtm data if needed
+            if (savedProvider === 'mailtm') {
+                const mailtmData = localStorage.getItem('tempmail_mailtm');
+                if (mailtmData) {
+                    const data = JSON.parse(mailtmData);
+                    mailtmAccount = { id: data.id, address: data.address };
+                    mailtmToken = data.token;
+                }
+            }
+
+            updateUIForEmail();
             refreshInbox();
             showToast('Email restored: ' + currentEmail, 'info');
         }
 
+        // ==================== REFRESH INBOX ====================
         async function refreshInbox() {
             if (!currentEmail) return;
 
@@ -867,34 +1035,13 @@
             btn.disabled = true;
 
             try {
-                const [login, domain] = currentEmail.split('@');
-                const res = await fetch(`${API_BASE}/?action=getMessages&login=${login}&domain=${domain}`);
-                
-                if (!res.ok) throw new Error('Network error');
-                
-                const data = await res.json();
-                const newMessages = Array.isArray(data) ? data : [];
-                
-                const hadMessages = messages.length > 0;
-                const hasNew = newMessages.length > messages.length;
-                messages = newMessages;
-
-                renderMessages();
-                document.getElementById('messageCount').textContent = messages.length;
-                document.getElementById('lastRefresh').textContent = 'Last refresh: ' + new Date().toLocaleTimeString();
-
-                if (hasNew && messages.length > 0) {
-                    showToast(`${messages.length} message(s) in inbox`, 'info');
-                    const latest = messages[0];
-                    const subj = (latest.subject || '').toLowerCase();
-                    if (subj.includes('otp') || subj.includes('verification') || subj.includes('code') || subj.includes('confirm')) {
-                        showToast('OTP/Verification email detected!', 'success');
-                    }
-                } else if (!hasNew && hadMessages) {
-                    showToast('No new messages', 'info');
+                if (currentProvider === 'mailtm' && mailtmToken) {
+                    await refreshMailtmInbox();
+                } else {
+                    await refresh1secmailInbox();
                 }
-
             } catch (err) {
+                console.error(err);
                 showToast('Refresh failed: ' + err.message, 'error');
             } finally {
                 icon.style.animation = '';
@@ -902,6 +1049,75 @@
             }
         }
 
+        async function refresh1secmailInbox() {
+            const [login, domain] = currentEmail.split('@');
+            
+            // Try direct first, then proxy
+            let url = `${API_PROVIDERS['1secmail'].base}/?action=getMessages&login=${login}&domain=${domain}`;
+            let res;
+            
+            try {
+                res = await fetch(url);
+                if (!res.ok) throw new Error('Direct failed');
+            } catch (e) {
+                // Try CORS proxy
+                const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+                res = await fetch(proxyUrl);
+            }
+
+            const data = await res.json();
+            const newMessages = Array.isArray(data) ? data : [];
+            
+            const hadMessages = messages.length > 0;
+            const hasNew = newMessages.length > messages.length;
+            messages = newMessages;
+
+            renderMessages();
+            document.getElementById('messageCount').textContent = messages.length;
+            document.getElementById('lastRefresh').textContent = 'Last refresh: ' + new Date().toLocaleTimeString();
+
+            if (hasNew && messages.length > 0) {
+                showToast(`${messages.length} message(s) in inbox`, 'info');
+                checkOTP(messages[0]);
+            } else if (!hasNew && hadMessages) {
+                showToast('No new messages', 'info');
+            }
+        }
+
+        async function refreshMailtmInbox() {
+            if (!mailtmToken) throw new Error('No token');
+
+            const res = await fetch('https://api.mail.tm/messages', {
+                headers: { 'Authorization': `Bearer ${mailtmToken}` }
+            });
+            const data = await res.json();
+            
+            let newMessages = [];
+            if (Array.isArray(data)) newMessages = data;
+            else if (data['hydra:member']) newMessages = data['hydra:member'];
+
+            const hadMessages = messages.length > 0;
+            const hasNew = newMessages.length > messages.length;
+            messages = newMessages;
+
+            renderMessages();
+            document.getElementById('messageCount').textContent = messages.length;
+            document.getElementById('lastRefresh').textContent = 'Last refresh: ' + new Date().toLocaleTimeString();
+
+            if (hasNew && messages.length > 0) {
+                showToast(`${messages.length} message(s) in inbox`, 'info');
+                checkOTP(messages[0]);
+            }
+        }
+
+        function checkOTP(msg) {
+            const subj = (msg.subject || '').toLowerCase();
+            if (subj.includes('otp') || subj.includes('verification') || subj.includes('code') || subj.includes('confirm')) {
+                showToast('OTP/Verification email detected!', 'success');
+            }
+        }
+
+        // ==================== RENDER MESSAGES ====================
         function renderMessages() {
             const container = document.getElementById('messagesList');
 
@@ -917,14 +1133,22 @@
             }
 
             container.innerHTML = messages.map((msg) => {
-                const date = new Date(msg.date);
+                const date = new Date(msg.date || msg.createdAt);
                 const timeStr = date.toLocaleString('id-ID', {
                     day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
                 });
-                const sender = msg.from || 'Unknown';
+                
+                let sender = 'Unknown';
+                if (msg.from) {
+                    if (typeof msg.from === 'string') sender = msg.from;
+                    else if (msg.from.name) sender = msg.from.name;
+                    else if (msg.from.address) sender = msg.from.address;
+                }
+                
                 const senderInitial = (sender.charAt(0) || '?').toUpperCase();
+                const subject = msg.subject || 'No Subject';
 
-                const otpMatch = (msg.subject || '').match(/\b\d{4,8}\b/);
+                const otpMatch = subject.match(/\b\d{4,8}\b/);
                 const otpHtml = otpMatch ?
                     `<div class="otp-badge"><i class="fas fa-shield-alt"></i>OTP: ${otpMatch[0]}</div>` : '';
 
@@ -940,69 +1164,131 @@
                             </div>
                             <div class="message-time">${timeStr}</div>
                         </div>
-                        <div class="message-subject">${escapeHtml(msg.subject || 'No Subject')}</div>
-                        <div class="message-preview">${escapeHtml(msg.subject || 'No preview')}</div>
+                        <div class="message-subject">${escapeHtml(subject)}</div>
+                        <div class="message-preview">${escapeHtml(subject)}</div>
                         ${otpHtml}
                     </div>
                 `;
             }).join('');
         }
 
+        // ==================== OPEN MESSAGE ====================
         async function openMessage(id) {
             if (!currentEmail) return;
 
             try {
-                const [login, domain] = currentEmail.split('@');
-                const res = await fetch(`${API_BASE}/?action=readMessage&login=${login}&domain=${domain}&id=${id}`);
-                
-                if (!res.ok) throw new Error('Failed to load');
-                
-                const msg = await res.json();
-                const date = new Date(msg.date);
-                const timeStr = date.toLocaleString('id-ID', {
-                    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
-                    hour: '2-digit', minute: '2-digit'
-                });
-
-                const otpMatch = (msg.textBody || msg.body || '').match(/\b\d{4,8}\b/) ||
-                                (msg.subject || '').match(/\b\d{4,8}\b/);
-                const otpSection = otpMatch ? `
-                    <div style="background:var(--otp-bg);border:1px solid var(--otp-border);border-radius:12px;padding:16px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-                        <div>
-                            <div style="font-size:11px;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Detected OTP Code</div>
-                            <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:var(--accent);letter-spacing:4px;">${otpMatch[0]}</div>
-                        </div>
-                        <button class="btn btn-primary" onclick="navigator.clipboard.writeText('${otpMatch[0]}');showToast('OTP copied!','success')">
-                            <i class="fas fa-copy"></i> Copy OTP
-                        </button>
-                    </div>
-                ` : '';
-
-                const bodyContent = msg.htmlBody || msg.textBody || msg.body || 'No content';
-
-                document.getElementById('modalBody').innerHTML = `
-                    <div class="email-detail-header">
-                        <div class="email-detail-subject">${escapeHtml(msg.subject || 'No Subject')}</div>
-                        <div class="email-detail-meta">
-                            <span><i class="fas fa-user"></i>${escapeHtml(msg.from || 'Unknown')}</span>
-                            <span><i class="fas fa-envelope"></i>${escapeHtml(msg.from || '')}</span>
-                            <span><i class="fas fa-clock"></i>${timeStr}</span>
-                            <span><i class="fas fa-tag"></i>${escapeHtml(currentEmail)}</span>
-                        </div>
-                    </div>
-                    ${otpSection}
-                    <div class="email-content">
-                        ${msg.htmlBody ? msg.htmlBody : `<pre style="white-space:pre-wrap;font-family:'Inter',sans-serif;background:var(--bg-card);padding:20px;border-radius:12px;border:1px solid var(--border);">${escapeHtml(bodyContent)}</pre>`}
-                    </div>
-                `;
-
-                document.getElementById('emailModal').classList.add('active');
-
+                if (currentProvider === 'mailtm' && mailtmToken) {
+                    await openMailtmMessage(id);
+                } else {
+                    await open1secmailMessage(id);
+                }
             } catch (err) {
                 showToast('Failed to load message: ' + err.message, 'error');
             }
         }
 
+        async function open1secmailMessage(id) {
+            const [login, domain] = currentEmail.split('@');
+            
+            let url = `${API_PROVIDERS['1secmail'].base}/?action=readMessage&login=${login}&domain=${domain}&id=${id}`;
+            let res;
+            
+            try {
+                res = await fetch(url);
+                if (!res.ok) throw new Error('Direct failed');
+            } catch (e) {
+                const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+                res = await fetch(proxyUrl);
+            }
+
+            const msg = await res.json();
+            const date = new Date(msg.date);
+            const timeStr = date.toLocaleString('id-ID', {
+                weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            });
+
+            const otpMatch = (msg.textBody || msg.body || '').match(/\b\d{4,8}\b/) ||
+                            (msg.subject || '').match(/\b\d{4,8}\b/);
+            const otpSection = otpMatch ? `
+                <div style="background:var(--otp-bg);border:1px solid var(--otp-border);border-radius:12px;padding:16px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+                    <div>
+                        <div style="font-size:11px;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Detected OTP Code</div>
+                        <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:var(--accent);letter-spacing:4px;">${otpMatch[0]}</div>
+                    </div>
+                    <button class="btn btn-primary" onclick="navigator.clipboard.writeText('${otpMatch[0]}');showToast('OTP copied!','success')">
+                        <i class="fas fa-copy"></i> Copy OTP
+                    </button>
+                </div>
+            ` : '';
+
+            const bodyContent = msg.textBody || msg.body || 'No content';
+
+            document.getElementById('modalBody').innerHTML = `
+                <div class="email-detail-header">
+                    <div class="email-detail-subject">${escapeHtml(msg.subject || 'No Subject')}</div>
+                    <div class="email-detail-meta">
+                        <span><i class="fas fa-user"></i>${escapeHtml(msg.from || 'Unknown')}</span>
+                        <span><i class="fas fa-envelope"></i>${escapeHtml(msg.from || '')}</span>
+                        <span><i class="fas fa-clock"></i>${timeStr}</span>
+                        <span><i class="fas fa-tag"></i>${escapeHtml(currentEmail)}</span>
+                    </div>
+                </div>
+                ${otpSection}
+                <div class="email-content">
+                    ${msg.htmlBody ? msg.htmlBody : `<pre style="white-space:pre-wrap;font-family:'Inter',sans-serif;background:var(--bg-card);padding:20px;border-radius:12px;border:1px solid var(--border);">${escapeHtml(bodyContent)}</pre>`}
+                </div>
+            `;
+
+            document.getElementById('emailModal').classList.add('active');
+        }
+
+        async function openMailtmMessage(id) {
+            const res = await fetch(`https://api.mail.tm/messages/${id}`, {
+                headers: { 'Authorization': `Bearer ${mailtmToken}` }
+            });
+            const msg = await res.json();
+            
+            const date = new Date(msg.createdAt);
+            const timeStr = date.toLocaleString('id-ID', {
+                weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            });
+
+            const otpMatch = (msg.text || '').match(/\b\d{4,8}\b/) ||
+                            (msg.subject || '').match(/\b\d{4,8}\b/);
+            const otpSection = otpMatch ? `
+                <div style="background:var(--otp-bg);border:1px solid var(--otp-border);border-radius:12px;padding:16px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+                    <div>
+                        <div style="font-size:11px;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Detected OTP Code</div>
+                        <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:var(--accent);letter-spacing:4px;">${otpMatch[0]}</div>
+                    </div>
+                    <button class="btn btn-primary" onclick="navigator.clipboard.writeText('${otpMatch[0]}');showToast('OTP copied!','success')">
+                        <i class="fas fa-copy"></i> Copy OTP
+                    </button>
+                </div>
+            ` : '';
+
+            document.getElementById('modalBody').innerHTML = `
+                <div class="email-detail-header">
+                    <div class="email-detail-subject">${escapeHtml(msg.subject || 'No Subject')}</div>
+                    <div class="email-detail-meta">
+                        <span><i class="fas fa-user"></i>${escapeHtml(msg.from?.name || msg.from?.address || 'Unknown')}</span>
+                        <span><i class="fas fa-envelope"></i>${escapeHtml(msg.from?.address || '')}</span>
+                        <span><i class="fas fa-clock"></i>${timeStr}</span>
+                        <span><i class="fas fa-tag"></i>${escapeHtml(currentEmail)}</span>
+                    </div>
+                </div>
+                ${otpSection}
+                <div class="email-content">
+                    ${msg.html ? msg.html : `<pre style="white-space:pre-wrap;font-family:'Inter',sans-serif;background:var(--bg-card);padding:20px;border-radius:12px;border:1px solid var(--border);">${escapeHtml(msg.text || 'No content')}</pre>`}
+                </div>
+            `;
+
+            document.getElementById('emailModal').classList.add('active');
+        }
+
+        // ==================== UTILS ====================
         function closeModal() {
             document.getElementById('emailModal').classList.remove('active');
         }
@@ -1027,7 +1313,12 @@
 
             currentEmail = null;
             messages = [];
+            mailtmAccount = null;
+            mailtmToken = null;
+            
             localStorage.removeItem('tempmail_email');
+            localStorage.removeItem('tempmail_provider');
+            localStorage.removeItem('tempmail_mailtm');
 
             document.getElementById('emailAddress').textContent = 'Click "Generate Email" to create your inbox';
             document.getElementById('copyBtn').disabled = true;
