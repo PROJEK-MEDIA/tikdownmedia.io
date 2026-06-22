@@ -377,22 +377,6 @@
             color: var(--text-dim);
         }
 
-        .refresh-bar {
-            width: 80px;
-            height: 3px;
-            background: var(--border);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .refresh-progress {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            border-radius: 3px;
-            transition: width 1s linear;
-            width: 100%;
-        }
-
         .messages-list {
             display: flex;
             flex-direction: column;
@@ -705,21 +689,6 @@
         .toast.error { background: rgba(239, 68, 68, 0.1); color: var(--danger); border-color: rgba(239, 68, 68, 0.2); }
         .toast.info { background: rgba(99, 102, 241, 0.1); color: var(--primary-light); border-color: rgba(99, 102, 241, 0.2); }
 
-        .debug-panel {
-            background: rgba(0,0,0,0.4);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 16px;
-            margin-top: 16px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            color: var(--text-dim);
-            max-height: 150px;
-            overflow-y: auto;
-        }
-
-        .debug-panel div { margin-bottom: 4px; }
-
         @media (max-width: 640px) {
             .container { padding: 16px; }
             .hero h1 { font-size: 28px; }
@@ -751,14 +720,14 @@
         </div>
         <div class="status-badge">
             <div class="status-dot"></div>
-            <span id="connectionStatus">API Connected</span>
+            <span id="connectionStatus">API Ready</span>
         </div>
     </header>
 
     <div class="container">
         <div class="hero">
             <h1>Your Temporary Inbox</h1>
-            <p>Generate a disposable email address instantly. Receive emails, OTP codes, and verification links in real-time.</p>
+            <p>Generate a disposable email address instantly. Receive emails, OTP codes, and verification links.</p>
         </div>
 
         <div class="email-card">
@@ -785,7 +754,6 @@
                     <span>Delete Account</span>
                 </button>
             </div>
-            <div class="debug-panel" id="debugPanel" style="display:none;"></div>
         </div>
 
         <div class="email-card">
@@ -796,18 +764,14 @@
                     <span class="inbox-count" id="messageCount">0</span>
                 </div>
                 <div class="refresh-info">
-                    <span>Auto-refresh</span>
-                    <div class="refresh-bar">
-                        <div class="refresh-progress" id="refreshProgress"></div>
-                    </div>
-                    <span id="refreshTimer">10s</span>
+                    <span id="lastRefresh">Last refresh: Never</span>
                 </div>
             </div>
             <div class="messages-list" id="messagesList">
                 <div class="empty-state">
                     <div class="empty-icon"><i class="fas fa-inbox"></i></div>
                     <h3>No messages yet</h3>
-                    <p>Generate an email address and wait for incoming messages. They will appear here automatically.</p>
+                    <p>Generate an email address and wait for incoming messages. Click Refresh to check.</p>
                 </div>
             </div>
         </div>
@@ -826,19 +790,14 @@
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
-        const API_BASE = 'https://api.mail.tm';
-        const AUTO_REFRESH_INTERVAL = 10000;
-        const REFRESH_BAR_DURATION = 10;
-
-        let account = null;
-        let token = null;
+        const API_BASE = 'https://www.1secmail.com/api/v1';
+        
+        let currentEmail = null;
         let messages = [];
-        let autoRefreshTimer = null;
-        let refreshCountdown = REFRESH_BAR_DURATION;
 
         document.addEventListener('DOMContentLoaded', () => {
             createParticles();
-            loadSavedAccount();
+            loadSavedEmail();
         });
 
         function createParticles() {
@@ -854,128 +813,30 @@
             }
         }
 
-        function log(msg) {
-            console.log(msg);
-            const panel = document.getElementById('debugPanel');
-            if (panel) {
-                panel.style.display = 'block';
-                const line = document.createElement('div');
-                line.textContent = new Date().toLocaleTimeString() + ' | ' + msg;
-                panel.appendChild(line);
-                panel.scrollTop = panel.scrollHeight;
-            }
-        }
-
-        async function apiGet(path, auth = false) {
-            const headers = { 'Accept': 'application/json' };
-            if (auth && token) headers['Authorization'] = `Bearer ${token}`;
-            const res = await fetch(`${API_BASE}${path}`, { headers });
-            if (!res.ok) {
-                const text = await res.text();
-                throw new Error(`HTTP ${res.status}: ${text}`);
-            }
-            if (res.status === 204) return null;
-            return res.json();
-        }
-
-        async function apiPost(path, body, auth = false) {
-            const headers = {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            };
-            if (auth && token) headers['Authorization'] = `Bearer ${token}`;
-            const res = await fetch(`${API_BASE}${path}`, {
-                method: 'POST',
-                headers,
-                body: JSON.stringify(body)
-            });
-            if (!res.ok) {
-                const text = await res.text();
-                let errMsg = `HTTP ${res.status}`;
-                try {
-                    const err = JSON.parse(text);
-                    errMsg = err.detail || err.message || errMsg;
-                } catch(e) {}
-                throw new Error(errMsg);
-            }
-            if (res.status === 204) return null;
-            return res.json();
-        }
-
-        async function apiDelete(path, auth = true) {
-            const headers = { 'Accept': 'application/json' };
-            if (auth && token) headers['Authorization'] = `Bearer ${token}`;
-            const res = await fetch(`${API_BASE}${path}`, { method: 'DELETE', headers });
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            return res.status === 204 ? null : res.json();
-        }
-
         async function generateEmail() {
             const btn = document.getElementById('generateBtn');
             btn.disabled = true;
             btn.innerHTML = '<div class="loading-spinner"></div><span>Creating...</span>';
 
             try {
-                log('Fetching domains...');
-                const domainsData = await apiGet('/domains');
-                log('Domains response: ' + JSON.stringify(domainsData).substring(0, 200));
+                const username = 'user' + Math.random().toString(36).substring(2, 10);
+                const domains = ['1secmail.com', '1secmail.org', '1secmail.net'];
+                const domain = domains[Math.floor(Math.random() * domains.length)];
+                const email = `${username}@${domain}`;
 
-                let domainList = [];
-                if (Array.isArray(domainsData)) {
-                    domainList = domainsData;
-                } else if (domainsData && Array.isArray(domainsData['hydra:member'])) {
-                    domainList = domainsData['hydra:member'];
-                } else if (domainsData && typeof domainsData === 'object') {
-                    for (const key in domainsData) {
-                        if (Array.isArray(domainsData[key])) {
-                            domainList = domainsData[key];
-                            break;
-                        }
-                    }
-                }
+                currentEmail = email;
+                localStorage.setItem('tempmail_email', email);
+                messages = [];
 
-                if (domainList.length === 0) {
-                    throw new Error('No domains available from API');
-                }
-
-                const domain = domainList[0].domain;
-                log('Selected domain: ' + domain);
-
-                const username = 'user' + Math.random().toString(36).substring(2, 10) + Date.now().toString(36).substring(0, 4);
-                const address = `${username}@${domain}`;
-                const password = Math.random().toString(36).substring(2, 15);
-
-                log('Creating account: ' + address);
-                account = await apiPost('/accounts', { address, password });
-                log('Account created: ' + JSON.stringify(account).substring(0, 200));
-
-                log('Getting token...');
-                const tokenRes = await apiPost('/token', { address, password });
-                log('Token received');
-                token = tokenRes.token;
-
-                if (!account.address) account.address = address;
-
-                localStorage.setItem('tempmail_account', JSON.stringify({
-                    id: account.id,
-                    address: account.address,
-                    password: password,
-                    token: token,
-                    createdAt: new Date().toISOString()
-                }));
-
-                document.getElementById('emailAddress').textContent = account.address;
+                document.getElementById('emailAddress').textContent = email;
                 document.getElementById('copyBtn').disabled = false;
                 document.getElementById('refreshBtn').disabled = false;
                 document.getElementById('deleteBtn').disabled = false;
 
-                showToast('Email created: ' + account.address, 'success');
-                startAutoRefresh();
+                showToast('Email created: ' + email, 'success');
                 await refreshInbox();
 
             } catch (err) {
-                console.error(err);
-                log('ERROR: ' + err.message);
                 showToast('Failed: ' + err.message, 'error');
             } finally {
                 btn.disabled = false;
@@ -983,32 +844,22 @@
             }
         }
 
-        async function loadSavedAccount() {
-            const saved = localStorage.getItem('tempmail_account');
+        function loadSavedEmail() {
+            const saved = localStorage.getItem('tempmail_email');
             if (!saved) return;
 
-            try            try {
-                const data = JSON.parse(saved);
-                token = data.token;
-                const acc = await apiGet('/me', true);
-                account = { id: acc.id, address: acc.address };
-
-                document.getElementById('emailAddress').textContent = account.address;
-                document.getElementById('copyBtn').disabled = false;
-                document.getElementById('refreshBtn').disabled = false;
-                document.getElementById('deleteBtn').disabled = false;
-
-                startAutoRefresh();
-                await refreshInbox();
-                showToast('Account restored', 'info');
-            } catch (err) {
-                log('Saved account invalid: ' + err.message);
-                localStorage.removeItem('tempmail_account');
-            }
+            currentEmail = saved;
+            document.getElementById('emailAddress').textContent = currentEmail;
+            document.getElementById('copyBtn').disabled = false;
+            document.getElementById('refreshBtn').disabled = false;
+            document.getElementById('deleteBtn').disabled = false;
+            
+            refreshInbox();
+            showToast('Email restored: ' + currentEmail, 'info');
         }
 
         async function refreshInbox() {
-            if (!account || !token) return;
+            if (!currentEmail) return;
 
             const btn = document.getElementById('refreshBtn');
             const icon = document.getElementById('refreshIcon');
@@ -1016,42 +867,35 @@
             btn.disabled = true;
 
             try {
-                const data = await apiGet('/messages', true);
-                log('Messages response: ' + JSON.stringify(data).substring(0, 300));
-
-                let newMessages = [];
-                if (Array.isArray(data)) {
-                    newMessages = data;
-                } else if (data && Array.isArray(data['hydra:member'])) {
-                    newMessages = data['hydra:member'];
-                } else if (data && typeof data === 'object') {
-                    for (const key in data) {
-                        if (Array.isArray(data[key])) {
-                            newMessages = data[key];
-                            break;
-                        }
-                    }
-                }
-
+                const [login, domain] = currentEmail.split('@');
+                const res = await fetch(`${API_BASE}/?action=getMessages&login=${login}&domain=${domain}`);
+                
+                if (!res.ok) throw new Error('Network error');
+                
+                const data = await res.json();
+                const newMessages = Array.isArray(data) ? data : [];
+                
+                const hadMessages = messages.length > 0;
                 const hasNew = newMessages.length > messages.length;
                 messages = newMessages;
+
                 renderMessages();
                 document.getElementById('messageCount').textContent = messages.length;
+                document.getElementById('lastRefresh').textContent = 'Last refresh: ' + new Date().toLocaleTimeString();
 
                 if (hasNew && messages.length > 0) {
                     showToast(`${messages.length} message(s) in inbox`, 'info');
                     const latest = messages[0];
                     const subj = (latest.subject || '').toLowerCase();
-                    if (subj.includes('otp') || subj.includes('verification') || subj.includes('code')) {
+                    if (subj.includes('otp') || subj.includes('verification') || subj.includes('code') || subj.includes('confirm')) {
                         showToast('OTP/Verification email detected!', 'success');
                     }
+                } else if (!hasNew && hadMessages) {
+                    showToast('No new messages', 'info');
                 }
+
             } catch (err) {
-                log('Refresh error: ' + err.message);
-                if (err.message.includes('401')) {
-                    showToast('Session expired. Generate new email.', 'error');
-                    clearAccount();
-                }
+                showToast('Refresh failed: ' + err.message, 'error');
             } finally {
                 icon.style.animation = '';
                 btn.disabled = false;
@@ -1066,41 +910,38 @@
                     <div class="empty-state">
                         <div class="empty-icon"><i class="fas fa-inbox"></i></div>
                         <h3>No messages yet</h3>
-                        <p>Your inbox is empty. Use this email on any website and messages will appear here automatically.</p>
+                        <p>Generate an email address and wait for incoming messages. Click Refresh to check.</p>
                     </div>
                 `;
                 return;
             }
 
             container.innerHTML = messages.map((msg) => {
-                const date = new Date(msg.createdAt);
+                const date = new Date(msg.date);
                 const timeStr = date.toLocaleString('id-ID', {
                     day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
                 });
-                const fromData = msg.from || {};
-                const senderName = fromData.name || (fromData.address ? fromData.address.split('@')[0] : 'Unknown');
-                const senderInitial = (senderName.charAt(0) || '?').toUpperCase();
-                const isUnread = !msg.seen;
+                const sender = msg.from || 'Unknown';
+                const senderInitial = (sender.charAt(0) || '?').toUpperCase();
 
-                const otpMatch = (msg.subject || '').match(/\b\d{4,8}\b/) ||
-                                (msg.intro || '').match(/\b\d{4,8}\b/);
+                const otpMatch = (msg.subject || '').match(/\b\d{4,8}\b/);
                 const otpHtml = otpMatch ?
                     `<div class="otp-badge"><i class="fas fa-shield-alt"></i>OTP: ${otpMatch[0]}</div>` : '';
 
                 return `
-                    <div class="message-item ${isUnread ? 'unread' : ''}" onclick="openMessage('${msg.id}')">
+                    <div class="message-item" onclick="openMessage('${msg.id}')">
                         <div class="message-top">
                             <div class="message-sender">
                                 <div class="sender-avatar">${senderInitial}</div>
                                 <div class="sender-info">
-                                    <div class="sender-name">${escapeHtml(senderName)}</div>
-                                    <div class="sender-email">${escapeHtml(fromData.address || 'unknown')}</div>
+                                    <div class="sender-name">${escapeHtml(sender)}</div>
+                                    <div class="sender-email">${escapeHtml(sender)}</div>
                                 </div>
                             </div>
                             <div class="message-time">${timeStr}</div>
                         </div>
                         <div class="message-subject">${escapeHtml(msg.subject || 'No Subject')}</div>
-                        <div class="message-preview">${escapeHtml(msg.intro || 'No preview available')}</div>
+                        <div class="message-preview">${escapeHtml(msg.subject || 'No preview')}</div>
                         ${otpHtml}
                     </div>
                 `;
@@ -1108,17 +949,22 @@
         }
 
         async function openMessage(id) {
-            if (!token) return;
+            if (!currentEmail) return;
 
             try {
-                const msg = await apiGet(`/messages/${id}`, true);
-                const date = new Date(msg.createdAt);
+                const [login, domain] = currentEmail.split('@');
+                const res = await fetch(`${API_BASE}/?action=readMessage&login=${login}&domain=${domain}&id=${id}`);
+                
+                if (!res.ok) throw new Error('Failed to load');
+                
+                const msg = await res.json();
+                const date = new Date(msg.date);
                 const timeStr = date.toLocaleString('id-ID', {
                     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
                     hour: '2-digit', minute: '2-digit'
                 });
 
-                const otpMatch = (msg.text || '').match(/\b\d{4,8}\b/) ||
+                const otpMatch = (msg.textBody || msg.body || '').match(/\b\d{4,8}\b/) ||
                                 (msg.subject || '').match(/\b\d{4,8}\b/);
                 const otpSection = otpMatch ? `
                     <div style="background:var(--otp-bg);border:1px solid var(--otp-border);border-radius:12px;padding:16px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
@@ -1132,36 +978,25 @@
                     </div>
                 ` : '';
 
-                const toData = msg.to || [{}];
-                const toAddress = toData[0]?.address || account?.address || '';
+                const bodyContent = msg.htmlBody || msg.textBody || msg.body || 'No content';
 
                 document.getElementById('modalBody').innerHTML = `
                     <div class="email-detail-header">
                         <div class="email-detail-subject">${escapeHtml(msg.subject || 'No Subject')}</div>
                         <div class="email-detail-meta">
-                            <span><i class="fas fa-user"></i>${escapeHtml(msg.from?.name || msg.from?.address || 'Unknown')}</span>
-                            <span><i class="fas fa-envelope"></i>${escapeHtml(msg.from?.address || '')}</span>
+                            <span><i class="fas fa-user"></i>${escapeHtml(msg.from || 'Unknown')}</span>
+                            <span><i class="fas fa-envelope"></i>${escapeHtml(msg.from || '')}</span>
                             <span><i class="fas fa-clock"></i>${timeStr}</span>
-                            <span><i class="fas fa-tag"></i>${escapeHtml(toAddress)}</span>
+                            <span><i class="fas fa-tag"></i>${escapeHtml(currentEmail)}</span>
                         </div>
                     </div>
                     ${otpSection}
                     <div class="email-content">
-                        ${msg.html ? msg.html : `<pre style="white-space:pre-wrap;font-family:'Inter',sans-serif;background:var(--bg-card);padding:20px;border-radius:12px;border:1px solid var(--border);">${escapeHtml(msg.text || 'No content')}</pre>`}
+                        ${msg.htmlBody ? msg.htmlBody : `<pre style="white-space:pre-wrap;font-family:'Inter',sans-serif;background:var(--bg-card);padding:20px;border-radius:12px;border:1px solid var(--border);">${escapeHtml(bodyContent)}</pre>`}
                     </div>
                 `;
 
                 document.getElementById('emailModal').classList.add('active');
-
-                await fetch(`${API_BASE}/messages/${id}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/merge-patch+json'
-                    },
-                    body: JSON.stringify({ seen: true })
-                });
-                await refreshInbox();
 
             } catch (err) {
                 showToast('Failed to load message: ' + err.message, 'error');
@@ -1172,38 +1007,9 @@
             document.getElementById('emailModal').classList.remove('active');
         }
 
-        function startAutoRefresh() {
-            stopAutoRefresh();
-            refreshCountdown = REFRESH_BAR_DURATION;
-            updateProgressBar();
-
-            autoRefreshTimer = setInterval(async () => {
-                refreshCountdown--;
-                document.getElementById('refreshTimer').textContent = refreshCountdown + 's';
-                updateProgressBar();
-
-                if (refreshCountdown <= 0) {
-                    refreshCountdown = REFRESH_BAR_DURATION;
-                    await refreshInbox();
-                }
-            }, 1000);
-        }
-
-        function stopAutoRefresh() {
-            if (autoRefreshTimer) {
-                clearInterval(autoRefreshTimer);
-                autoRefreshTimer = null;
-            }
-        }
-
-        function updateProgressBar() {
-            const pct = (refreshCountdown / REFRESH_BAR_DURATION) * 100;
-            document.getElementById('refreshProgress').style.width = pct + '%';
-        }
-
         function copyEmail() {
-            if (!account) return;
-            navigator.clipboard.writeText(account.address).then(() => {
+            if (!currentEmail) return;
+            navigator.clipboard.writeText(currentEmail).then(() => {
                 const btn = document.getElementById('copyBtn');
                 btn.classList.add('copied');
                 btn.innerHTML = '<i class="fas fa-check"></i>';
@@ -1215,41 +1021,23 @@
             });
         }
 
-        async function deleteAccount() {
-            if (!account || !token) return;
-            if (!confirm('Delete this email account? All messages will be lost.')) return;
+        function deleteAccount() {
+            if (!currentEmail) return;
+            if (!confirm('Delete this email? All messages will be lost.')) return;
 
-            const btn = document.getElementById('deleteBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<div class="loading-spinner"></div><span>Deleting...</span>';
-
-            try {
-                await apiDelete(`/accounts/${account.id}`);
-                clearAccount();
-                showToast('Account deleted', 'success');
-            } catch (err) {
-                showToast('Failed to delete: ' + err.message, 'error');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-trash"></i><span>Delete Account</span>';
-            }
-        }
-
-        function clearAccount() {
-            account = null;
-            token = null;
+            currentEmail = null;
             messages = [];
-            stopAutoRefresh();
-            localStorage.removeItem('tempmail_account');
+            localStorage.removeItem('tempmail_email');
 
             document.getElementById('emailAddress').textContent = 'Click "Generate Email" to create your inbox';
             document.getElementById('copyBtn').disabled = true;
             document.getElementById('refreshBtn').disabled = true;
             document.getElementById('deleteBtn').disabled = true;
             document.getElementById('messageCount').textContent = '0';
-            document.getElementById('refreshTimer').textContent = '10s';
-            document.getElementById('refreshProgress').style.width = '100%';
+            document.getElementById('lastRefresh').textContent = 'Last refresh: Never';
 
             renderMessages();
+            showToast('Email deleted', 'success');
         }
 
         function escapeHtml(text) {
