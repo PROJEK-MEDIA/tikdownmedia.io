@@ -26,7 +26,6 @@
             margin: 0 auto;
         }
 
-        /* HEADER */
         .header {
             text-align: center;
             padding: 30px 0 20px;
@@ -54,7 +53,6 @@
             margin-top: 4px;
         }
 
-        /* CARD */
         .card {
             background: #ffffff;
             border-radius: 16px;
@@ -76,7 +74,6 @@
             gap: 8px;
         }
 
-        /* EMAIL BOX */
         .email-box {
             display: flex;
             align-items: center;
@@ -145,7 +142,6 @@
             color: #fff;
         }
 
-        /* BUTTON */
         .btn-row {
             display: flex;
             gap: 10px;
@@ -200,7 +196,6 @@
             cursor: not-allowed;
         }
 
-        /* INBOX */
         .inbox-header {
             display: flex;
             justify-content: space-between;
@@ -233,7 +228,6 @@
             color: #9ca3af;
         }
 
-        /* MESSAGE LIST */
         .msg-list {
             display: flex;
             flex-direction: column;
@@ -330,7 +324,6 @@
             color: #4f46e5;
         }
 
-        /* EMPTY */
         .empty {
             text-align: center;
             padding: 50px 20px;
@@ -357,7 +350,7 @@
             margin-top: 4px;
         }
 
-        /* MODAL */
+        /* MODAL - HTML VIEW */
         .modal {
             position: fixed;
             inset: 0;
@@ -433,7 +426,6 @@
             flex: 1;
         }
 
-        /* DETAIL */
         .detail-subj {
             font-size: 18px;
             font-weight: 600;
@@ -464,7 +456,6 @@
             color: #4f46e5;
         }
 
-        /* OTP */
         .otp-box {
             background: #eef2ff;
             border-radius: 10px;
@@ -508,7 +499,7 @@
             background: #4338ca;
         }
 
-        /* EMAIL CONTENT - LINK BISA DIKLIK */
+        /* EMAIL CONTENT - HTML VIEW DENGAN LINK KLIKABLE */
         .email-content {
             font-size: 14px;
             line-height: 1.8;
@@ -519,8 +510,18 @@
             margin-bottom: 10px;
         }
 
-        /* LINK WRAPPER - BISA DIKLIK */
-        .link-wrap {
+        .email-content a {
+            color: #4f46e5;
+            text-decoration: underline;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .email-content a:hover {
+            color: #4338ca;
+        }
+
+        .email-content .link-wrap {
             display: flex;
             align-items: center;
             gap: 12px;
@@ -533,36 +534,36 @@
             transition: 0.2s;
         }
 
-        .link-wrap:hover {
+        .email-content .link-wrap:hover {
             border-color: #4f46e5;
             background: #f0f2ff;
         }
 
-        .link-wrap .link-text {
+        .email-content .link-wrap .link-text {
             flex: 1;
             min-width: 60px;
             word-break: break-all;
             font-size: 13px;
         }
 
-        .link-wrap .link-text a {
+        .email-content .link-wrap .link-text a {
             color: #4f46e5;
             text-decoration: underline;
             font-weight: 500;
             cursor: pointer;
         }
 
-        .link-wrap .link-text a:hover {
+        .email-content .link-wrap .link-text a:hover {
             color: #4338ca;
         }
 
-        .link-wrap .actions {
+        .email-content .link-wrap .actions {
             display: flex;
             gap: 6px;
             flex-shrink: 0;
         }
 
-        .link-wrap .actions button {
+        .email-content .link-wrap .actions button {
             padding: 4px 12px;
             border: 1px solid #e5e7eb;
             background: #fff;
@@ -575,23 +576,12 @@
             font-family: inherit;
         }
 
-        .link-wrap .actions button:hover {
+        .email-content .link-wrap .actions button:hover {
             background: #4f46e5;
             color: #fff;
             border-color: #4f46e5;
         }
 
-        .link-wrap .actions button.btn-copy-link:hover {
-            background: #059669;
-            border-color: #059669;
-        }
-
-        .link-wrap .actions button.btn-open-link:hover {
-            background: #4f46e5;
-            border-color: #4f46e5;
-        }
-
-        /* TOAST */
         .toast-stack {
             position: fixed;
             bottom: 20px;
@@ -693,11 +683,11 @@
                 font-size: 22px;
                 letter-spacing: 3px;
             }
-            .link-wrap {
+            .email-content .link-wrap {
                 flex-direction: column;
                 align-items: stretch;
             }
-            .link-wrap .actions {
+            .email-content .link-wrap .actions {
                 justify-content: center;
             }
             .inbox-header .meta {
@@ -710,7 +700,6 @@
 
     <div class="container">
 
-        <!-- HEADER -->
         <div class="header">
             <div class="logo">
                 <i class="fas fa-envelope"></i> Temp<span>Mail</span>
@@ -718,7 +707,6 @@
             <div class="sub">Disposable Temporary Email</div>
         </div>
 
-        <!-- CARD -->
         <div class="card">
             <div class="card-title">
                 <i class="fas fa-at"></i> Your Temporary Email Address
@@ -750,7 +738,6 @@
             </div>
         </div>
 
-        <!-- INBOX -->
         <div class="card" style="padding: 20px 24px;">
             <div class="inbox-header">
                 <div class="left">
@@ -796,9 +783,6 @@
         let refreshTimer = null;
         let isGenerating = false;
 
-        /* =========================================================
-           API
-           ========================================================= */
         const API = {
             async request(url, options = {}) {
                 const res = await fetch(url, {
@@ -825,9 +809,6 @@
             deleteMailbox(email) { return this.request(TEMPY_API + '/mailbox/' + encodeURIComponent(email), { method: 'DELETE' }); }
         };
 
-        /* =========================================================
-           GENERATE
-           ========================================================= */
         async function generateEmail() {
             if (isGenerating) return;
             if (account) {
@@ -862,9 +843,6 @@
             }
         }
 
-        /* =========================================================
-           RESTORE SESSION
-           ========================================================= */
         document.addEventListener('DOMContentLoaded', async function() {
             const saved = localStorage.getItem('neonmail_session');
             if (!saved) return;
@@ -887,9 +865,6 @@
             } catch (e) { localStorage.removeItem('neonmail_session'); }
         });
 
-        /* =========================================================
-           UI
-           ========================================================= */
         function updateUI() {
             const el = document.getElementById('emailDisplay');
             el.value = account.email;
@@ -899,9 +874,6 @@
             document.getElementById('delBtn').disabled = false;
         }
 
-        /* =========================================================
-           REFRESH
-           ========================================================= */
         async function refreshInbox() {
             if (!account?.email) { toast('No active session', 'err'); return; }
             const icon = document.getElementById('refIcon');
@@ -926,9 +898,6 @@
             }
         }
 
-        /* =========================================================
-           RENDER MESSAGES
-           ========================================================= */
         function renderMessages() {
             const container = document.getElementById('msgList');
             document.getElementById('msgCount').textContent = messages.length || 0;
@@ -994,7 +963,7 @@
         }
 
         /* =========================================================
-           OPEN MESSAGE - BIKIN LINK KLIKABLE
+           OPEN MESSAGE - RENDER HTML VIEW
            ========================================================= */
         function openMessage(index) {
             const msg = messages[index];
@@ -1009,13 +978,18 @@
             let htmlContent = '';
 
             if (html) {
+                // KALO ADA HTML, RENDER LANGSUNG
                 let clean = stripDanger(html);
-                clean = processHtmlLinks(clean);
                 htmlContent = `<div class="email-content">${clean}</div>`;
             } else {
-                // PLAIN TEXT -> BIKIN LINK KLIKABLE
+                // KALO PLAIN TEXT, UBAH KE HTML DENGAN LINK
                 let text = esc(body || 'No content');
-                text = processPlainTextLinks(text);
+                // Ubah newline ke <br>
+                text = text.replace(/\n/g, '<br>');
+                // Ubah URL jadi link
+                text = text.replace(/(https?:\/\/[^\s<>"']+)/gi, function(url) {
+                    return `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(url)}</a>`;
+                });
                 htmlContent = `<div class="email-content">${text}</div>`;
             }
 
@@ -1031,106 +1005,6 @@
           `;
 
             document.getElementById('modalBg').classList.add('open');
-        }
-
-        /* =========================================================
-           PROSES PLAIN TEXT -> BIKIN LINK KLIKABLE
-           ========================================================= */
-        function processPlainTextLinks(text) {
-            let processed = text;
-
-            // 1. Cari URL mentah: https://...
-            processed = processed.replace(/(https?:\/\/[^\s<>"']+)/gi, function(url) {
-                return `<div class="link-wrap">
-              <div class="link-text"><a href="${esc(url)}" target="_blank" rel="noopener">${esc(url)}</a></div>
-              <div class="actions">
-                <button class="btn-open-link" onclick="event.stopPropagation(); openLink('${escJs(url)}')"><i class="fas fa-external-link-alt"></i> Buka</button>
-                <button class="btn-copy-link" onclick="event.stopPropagation(); copyLink('${escJs(url)}')"><i class="fas fa-copy"></i> Salin</button>
-              </div>
-            </div>`;
-            });
-
-            // 2. Cari pola: "Sign in to Alight Creative" diikuti URL di dekatnya
-            // Contoh: "click this link: Sign in to Alight Creative https://..."
-            const patterns = [
-                /(?:click|follow|visit|open|go to)\s+(?:this\s+)?(?:link|url)?\s*:?\s*([^:\n]*?)(https?:\/\/[^\s<>"']+)/gi,
-                /([^(\n]*?)\(?(https?:\/\/[^\s<>"']+)\)?/gi,
-                /([^-\n]*?)\s*[-–—]\s*(https?:\/\/[^\s<>"']+)/gi,
-            ];
-
-            patterns.forEach(pattern => {
-                processed = processed.replace(pattern, function(match, label, url) {
-                    let cleanLabel = label ? label.trim() : 'Link';
-                    if (!cleanLabel || cleanLabel.length < 2) cleanLabel = url;
-                    if (match.includes('link-wrap')) return match;
-                    return `<div class="link-wrap">
-                <div class="link-text"><a href="${esc(url)}" target="_blank" rel="noopener">${esc(cleanLabel)}</a></div>
-                <div class="actions">
-                  <button class="btn-open-link" onclick="event.stopPropagation(); openLink('${escJs(url)}')"><i class="fas fa-external-link-alt"></i> Buka</button>
-                  <button class="btn-copy-link" onclick="event.stopPropagation(); copyLink('${escJs(url)}')"><i class="fas fa-copy"></i> Salin</button>
-                </div>
-              </div>`;
-                });
-            });
-
-            // 3. Cari teks yang mirip link: "Sign in to Alight Creative" (tanpa URL)
-            // Ini agak tricky, kita skip karena tanpa URL gak bisa dibuat link
-
-            return processed;
-        }
-
-        /* =========================================================
-           PROSES HTML LINK
-           ========================================================= */
-        function processHtmlLinks(html) {
-            let processed = html.replace(/<a\s+([^>]*href=["']([^"']*)["'][^>]*)>(.*?)<\/a>/gi, function(m, attrs, href, text) {
-                if (!href || href === '#' || href.trim() === '') return m;
-                return `<div class="link-wrap">
-              <div class="link-text"><a href="${esc(href)}" target="_blank" rel="noopener">${text || esc(href)}</a></div>
-              <div class="actions">
-                <button class="btn-open-link" onclick="event.stopPropagation(); openLink('${escJs(href)}')"><i class="fas fa-external-link-alt"></i> Buka</button>
-                <button class="btn-copy-link" onclick="event.stopPropagation(); copyLink('${escJs(href)}')"><i class="fas fa-copy"></i> Salin</button>
-              </div>
-            </div>`;
-            });
-
-            // Juga detect URL mentah
-            processed = processed.replace(/(https?:\/\/[^\s<>"']+)/gi, function(url) {
-                if (url.match(/href=/i) || url.match(/link-wrap/)) return url;
-                return `<div class="link-wrap">
-              <div class="link-text"><a href="${esc(url)}" target="_blank" rel="noopener">${esc(url)}</a></div>
-              <div class="actions">
-                <button class="btn-open-link" onclick="event.stopPropagation(); openLink('${escJs(url)}')"><i class="fas fa-external-link-alt"></i> Buka</button>
-                <button class="btn-copy-link" onclick="event.stopPropagation(); copyLink('${escJs(url)}')"><i class="fas fa-copy"></i> Salin</button>
-              </div>
-            </div>`;
-            });
-
-            return processed;
-        }
-
-        /* =========================================================
-           LINK FUNCTIONS
-           ========================================================= */
-        function openLink(url) {
-            if (url) window.open(url, '_blank', 'noopener,noreferrer');
-        }
-
-        async function copyLink(url) {
-            if (!url) { toast('Tidak ada link', 'err'); return; }
-            try {
-                await navigator.clipboard.writeText(url);
-                toast('✅ Link disalin!', 'ok');
-            } catch (e) {
-                const ta = document.createElement('textarea');
-                ta.value = url;
-                ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
-                document.body.appendChild(ta);
-                ta.select();
-                document.execCommand('copy');
-                document.body.removeChild(ta);
-                toast('✅ Link disalin!', 'ok');
-            }
         }
 
         /* =========================================================
@@ -1164,9 +1038,6 @@
             toast('Address terminated', 'ok');
         }
 
-        /* =========================================================
-           CLEAR
-           ========================================================= */
         function clearSession(showToast = false) {
             account = null;
             messages = [];
@@ -1184,18 +1055,12 @@
             if (showToast) toast('Session cleared', 'ok');
         }
 
-        /* =========================================================
-           AUTO REFRESH
-           ========================================================= */
         function startAutoRefresh() {
             if (refreshTimer) clearInterval(refreshTimer);
             refreshTimer = setInterval(() => { if (account && !document.hidden) refreshInbox(); }, 12000);
         }
         startAutoRefresh();
 
-        /* =========================================================
-           MODAL
-           ========================================================= */
         function closeModal() { document.getElementById('modalBg').classList.remove('open'); }
         document.getElementById('modalBg').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
         document.addEventListener('keydown', function(e) {
@@ -1206,9 +1071,6 @@
             }
         });
 
-        /* =========================================================
-           HELPERS
-           ========================================================= */
         function esc(text) {
             if (text == null) return '';
             const d = document.createElement('div');
@@ -1231,9 +1093,6 @@
                 .replace(/on\w+='[^']*'/gi, '');
         }
 
-        /* =========================================================
-           TOAST
-           ========================================================= */
         function toast(message, type = 'inf') {
             const stack = document.getElementById('toastStack');
             const el = document.createElement('div');
