@@ -3,842 +3,1387 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#050810">
+<meta name="theme-color" content="#07111f">
+
 <title>NEONMAIL — Temporary Inbox</title>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 *{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
 :root{
-  --bg:#050810;
-  --panel:#0b111d;
-  --panel2:#0e1624;
-  --line:rgba(255,255,255,.08);
-  --text:#f4f7fb;
-  --muted:#8995a8;
-  --blue:#4f8cff;
-  --cyan:#22d3ee;
-  --green:#22c55e;
-  --red:#ef4444;
-  --shadow:0 25px 70px rgba(0,0,0,.45);
+    --bg:#050910;
+    --panel:#0b111b;
+    --panel2:#101925;
+    --line:rgba(255,255,255,.08);
+
+    --text:#f5f7fb;
+    --muted:#8995a8;
+
+    --blue:#4f8cff;
+    --blue2:#1a73e8;
+    --cyan:#22d3ee;
+
+    --green:#22c55e;
+    --red:#ef4444;
+
+    --shadow:0 25px 70px rgba(0,0,0,.45);
+}
+
+html,
+body{
+    min-height:100%;
 }
 
 body{
-  min-height:100vh;
-  background:
-    radial-gradient(circle at 10% 0%,rgba(79,140,255,.14),transparent 30%),
-    radial-gradient(circle at 90% 20%,rgba(34,211,238,.08),transparent 25%),
-    var(--bg);
-  color:var(--text);
-  font-family:Inter,system-ui,sans-serif;
+    min-height:100vh;
+
+    background:
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(79,140,255,.15),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 15%,
+            rgba(34,211,238,.08),
+            transparent 25%
+        ),
+        var(--bg);
+
+    color:var(--text);
+
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
 }
 
 button{
-  font:inherit;
+    font-family:inherit;
 }
+
+button:focus{
+    outline:none;
+}
+
+/* =========================================================
+   APP
+========================================================= */
 
 .app{
-  width:min(1100px,94%);
-  margin:auto;
-  padding:28px 0 50px;
+    width:min(1100px,94%);
+    margin:auto;
+    padding:25px 0 50px;
 }
 
-/* ================= TOPBAR ================= */
+/* =========================================================
+   TOPBAR
+========================================================= */
 
 .topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:25px;
 }
 
 .logo{
-  display:flex;
-  align-items:center;
-  gap:11px;
-  font-weight:800;
-  font-size:21px;
-  letter-spacing:-.6px;
+    display:flex;
+    align-items:center;
+    gap:11px;
+
+    font-size:21px;
+    font-weight:800;
+
+    letter-spacing:-.7px;
 }
 
 .logo-icon{
-  width:38px;
-  height:38px;
-  display:grid;
-  place-items:center;
-  border-radius:12px;
-  background:linear-gradient(135deg,var(--blue),var(--cyan));
-  box-shadow:0 8px 30px rgba(79,140,255,.28);
+    width:39px;
+    height:39px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            var(--cyan)
+        );
+
+    box-shadow:
+        0 8px 30px
+        rgba(79,140,255,.28);
+
+    font-size:18px;
 }
 
 .status{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  color:var(--muted);
-  font-size:12px;
+    display:flex;
+    align-items:center;
+    gap:7px;
+
+    color:var(--muted);
+
+    font-size:11px;
+    font-weight:600;
 }
 
-.dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:var(--green);
-  box-shadow:0 0 12px var(--green);
+.status-dot{
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+
+    background:var(--green);
+
+    box-shadow:
+        0 0 12px
+        rgba(34,197,94,.8);
 }
 
-/* ================= HERO ================= */
+/* =========================================================
+   HERO
+========================================================= */
 
 .hero{
-  text-align:center;
-  padding:30px 10px 26px;
+    text-align:center;
+    padding:25px 10px 27px;
 }
 
 .hero h1{
-  font-size:clamp(30px,6vw,54px);
-  letter-spacing:-2.5px;
-  line-height:1;
-  font-weight:800;
+    font-size:
+        clamp(32px,6vw,55px);
+
+    line-height:1;
+
+    letter-spacing:-2.8px;
+
+    font-weight:800;
 }
 
 .hero h1 span{
-  background:linear-gradient(90deg,#fff,var(--cyan),var(--blue));
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
+    background:
+        linear-gradient(
+            90deg,
+            #fff,
+            var(--cyan),
+            var(--blue)
+        );
+
+    -webkit-background-clip:text;
+    background-clip:text;
+
+    color:transparent;
 }
 
 .hero p{
-  max-width:650px;
-  margin:15px auto 0;
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.7;
+    max-width:650px;
+
+    margin:15px auto 0;
+
+    color:var(--muted);
+
+    font-size:13px;
+    line-height:1.7;
 }
 
-/* ================= MAIL CARD ================= */
+/* =========================================================
+   MAILBOX
+========================================================= */
 
 .mail-card{
-  background:linear-gradient(145deg,rgba(15,23,38,.94),rgba(7,12,21,.94));
-  border:1px solid var(--line);
-  border-radius:24px;
-  box-shadow:var(--shadow);
-  overflow:hidden;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15,23,38,.95),
+            rgba(7,12,21,.95)
+        );
+
+    border:1px solid var(--line);
+
+    border-radius:23px;
+
+    overflow:hidden;
+
+    box-shadow:var(--shadow);
 }
 
 .mail-head{
-  padding:18px;
-  border-bottom:1px solid var(--line);
+    padding:18px;
 }
 
 .mail-label{
-  color:var(--muted);
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:1.2px;
-  margin-bottom:9px;
+    margin-bottom:9px;
+
+    color:var(--muted);
+
+    font-size:10px;
+    font-weight:600;
+
+    text-transform:uppercase;
+
+    letter-spacing:1.3px;
 }
 
 .email-row{
-  display:flex;
-  gap:10px;
+    display:flex;
+    gap:9px;
 }
 
 .email-box{
-  flex:1;
-  min-width:0;
-  background:#070c15;
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:15px;
-  color:#fff;
-  font-size:14px;
-  font-weight:600;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
+    flex:1;
+    min-width:0;
+
+    display:flex;
+    align-items:center;
+
+    padding:0 15px;
+
+    min-height:48px;
+
+    background:#070c14;
+
+    border:1px solid var(--line);
+
+    border-radius:13px;
+
+    color:#fff;
+
+    font-size:13px;
+    font-weight:600;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 
 .actions{
-  display:flex;
-  gap:8px;
+    display:flex;
+    gap:8px;
 }
 
 .btn{
-  border:1px solid var(--line);
-  border-radius:13px;
-  padding:0 15px;
-  min-height:46px;
-  cursor:pointer;
-  color:#fff;
-  background:#121b2a;
-  transition:.2s;
-  font-weight:600;
+    min-height:46px;
+
+    padding:0 15px;
+
+    border:1px solid var(--line);
+
+    border-radius:12px;
+
+    background:#111a28;
+
+    color:#fff;
+
+    font-size:12px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.18s;
 }
 
 .btn:hover{
-  transform:translateY(-1px);
-  border-color:rgba(255,255,255,.18);
-  background:#172235;
-}
+    background:#172234;
 
-.btn.primary{
-  background:linear-gradient(135deg,var(--blue),#3168e9);
-  border-color:transparent;
-}
+    border-color:
+        rgba(255,255,255,.16);
 
-.btn.danger{
-  color:#ff7777;
+    transform:translateY(-1px);
 }
 
 .btn:disabled{
-  opacity:.5;
-  cursor:not-allowed;
-  transform:none;
+    opacity:.45;
+
+    cursor:not-allowed;
+
+    transform:none;
+}
+
+.btn.primary{
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            #3168e9
+        );
+
+    border-color:transparent;
+}
+
+.btn.danger{
+    color:#ff7474;
 }
 
 .mail-meta{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  padding-top:14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:12px;
+
+    margin-top:13px;
 }
 
 .expiry{
-  color:var(--muted);
-  font-size:12px;
+    color:var(--muted);
+
+    font-size:11px;
 }
 
 .expiry strong{
-  color:#fff;
+    color:#fff;
 }
 
-/* ================= INBOX ================= */
+/* =========================================================
+   INBOX
+========================================================= */
 
 .inbox{
-  margin-top:18px;
-  background:linear-gradient(145deg,rgba(15,23,38,.94),rgba(7,12,21,.94));
-  border:1px solid var(--line);
-  border-radius:24px;
-  box-shadow:var(--shadow);
-  overflow:hidden;
+    margin-top:18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15,23,38,.95),
+            rgba(7,12,21,.95)
+        );
+
+    border:1px solid var(--line);
+
+    border-radius:23px;
+
+    overflow:hidden;
+
+    box-shadow:var(--shadow);
 }
 
 .inbox-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  padding:18px;
-  border-bottom:1px solid var(--line);
+    min-height:65px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 18px;
+
+    border-bottom:1px solid var(--line);
 }
 
 .inbox-title{
-  display:flex;
-  align-items:center;
-  gap:10px;
+    display:flex;
+    align-items:center;
+    gap:9px;
 }
 
 .inbox-title h2{
-  font-size:16px;
+    font-size:15px;
 }
 
 .badge{
-  min-width:24px;
-  height:24px;
-  display:grid;
-  place-items:center;
-  padding:0 7px;
-  border-radius:999px;
-  background:rgba(79,140,255,.13);
-  color:#82aaff;
-  font-size:11px;
-  font-weight:700;
+    min-width:23px;
+    height:23px;
+
+    display:grid;
+    place-items:center;
+
+    padding:0 7px;
+
+    border-radius:999px;
+
+    background:
+        rgba(79,140,255,.13);
+
+    color:#82aaff;
+
+    font-size:10px;
+    font-weight:700;
 }
 
 .message-list{
-  min-height:270px;
+    min-height:270px;
 }
 
 .message{
-  padding:18px;
-  border-bottom:1px solid var(--line);
-  cursor:pointer;
-  transition:.2s;
-}
+    padding:17px 18px;
 
-.message:last-child{
-  border-bottom:0;
+    border-bottom:1px solid var(--line);
+
+    cursor:pointer;
+
+    transition:
+        background .18s,
+        transform .18s;
 }
 
 .message:hover{
-  background:rgba(255,255,255,.025);
+    background:
+        rgba(255,255,255,.025);
+}
+
+.message:last-child{
+    border-bottom:0;
 }
 
 .message-top{
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
+    display:flex;
+    justify-content:space-between;
+
+    gap:15px;
 }
 
 .sender{
-  font-size:13px;
-  font-weight:700;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
+    color:#edf2fa;
+
+    font-size:12px;
+    font-weight:700;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
 }
 
 .date{
-  color:var(--muted);
-  font-size:11px;
-  white-space:nowrap;
+    color:var(--muted);
+
+    font-size:10px;
+
+    white-space:nowrap;
 }
 
 .subject{
-  margin-top:7px;
-  font-size:13px;
-  color:#dce5f2;
-  font-weight:600;
+    margin-top:7px;
+
+    color:#dfe6f1;
+
+    font-size:13px;
+    font-weight:600;
 }
 
 .preview{
-  margin-top:6px;
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.6;
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
+    margin-top:5px;
+
+    color:#7f8b9d;
+
+    font-size:11px;
+
+    line-height:1.6;
+
+    display:
+        -webkit-box;
+
+    -webkit-line-clamp:2;
+
+    -webkit-box-orient:vertical;
+
+    overflow:hidden;
 }
 
 .empty{
-  min-height:270px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  padding:30px;
-  text-align:center;
-  color:var(--muted);
+    min-height:270px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:30px;
+
+    text-align:center;
+
+    color:var(--muted);
 }
 
 .empty-icon{
-  width:58px;
-  height:58px;
-  display:grid;
-  place-items:center;
-  border-radius:18px;
-  background:#0e1726;
-  margin-bottom:14px;
-  font-size:25px;
+    width:58px;
+    height:58px;
+
+    display:grid;
+    place-items:center;
+
+    margin-bottom:14px;
+
+    border-radius:18px;
+
+    background:#0e1726;
+
+    font-size:24px;
 }
 
 .empty strong{
-  color:#dce5f2;
-  font-size:14px;
+    color:#dce5f2;
+
+    font-size:13px;
 }
 
 .empty span{
-  font-size:12px;
-  margin-top:6px;
+    margin-top:6px;
+
+    font-size:11px;
 }
 
-/* ================= MODAL ================= */
+/* =========================================================
+   MODAL
+========================================================= */
 
 .modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.72);
-  backdrop-filter:blur(10px);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  z-index:50;
+    position:fixed;
+
+    inset:0;
+
+    z-index:100;
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:12px;
+
+    background:
+        rgba(0,0,0,.74);
+
+    backdrop-filter:blur(12px);
 }
 
 .modal.show{
-  display:flex;
+    display:flex;
 }
 
 .modal-card{
-  width:min(760px,100%);
-  max-height:90vh;
-  overflow:auto;
-  background:#0b111d;
-  border:1px solid var(--line);
-  border-radius:22px;
-  box-shadow:var(--shadow);
+    width:min(850px,100%);
+
+    max-height:94vh;
+
+    display:flex;
+    flex-direction:column;
+
+    overflow:hidden;
+
+    background:#f8f9fa;
+
+    border-radius:18px;
+
+    box-shadow:
+        0 30px 100px
+        rgba(0,0,0,.65);
 }
 
-.modal-head{
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  padding:18px;
-  border-bottom:1px solid var(--line);
+/* =========================================================
+   EMAIL HEADER — GMAIL STYLE
+========================================================= */
+
+.email-header{
+    flex-shrink:0;
+
+    background:#fff;
+
+    color:#202124;
+
+    border-bottom:1px solid #e5e7eb;
+
+    padding:19px 21px 15px;
 }
 
-.modal-head h3{
-  font-size:15px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
+.email-subject{
+    color:#202124;
+
+    font-size:20px;
+    font-weight:500;
+
+    line-height:1.3;
+
+    word-break:break-word;
 }
 
-.modal-sender{
-  color:#8995a8;
-  font-size:11px;
-  margin-top:5px;
+.email-sender-row{
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+
+    margin-top:16px;
+}
+
+.sender-avatar{
+    width:38px;
+    height:38px;
+
+    flex-shrink:0;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f8cff,
+            #22d3ee
+        );
+
+    color:#fff;
+
+    font-size:14px;
+    font-weight:700;
+}
+
+.sender-info{
+    min-width:0;
+    flex:1;
+}
+
+.sender-name{
+    color:#202124;
+
+    font-size:13px;
+    font-weight:600;
+
+    word-break:break-word;
+}
+
+.sender-address{
+    margin-top:2px;
+
+    color:#5f6368;
+
+    font-size:11px;
+
+    word-break:break-all;
+}
+
+.email-date{
+    color:#5f6368;
+
+    font-size:10px;
+
+    white-space:nowrap;
 }
 
 .close{
-  width:34px;
-  height:34px;
-  flex-shrink:0;
-  border-radius:10px;
-  border:1px solid var(--line);
-  background:#111a29;
-  color:#fff;
-  cursor:pointer;
-  font-size:20px;
+    width:35px;
+    height:35px;
+
+    display:grid;
+    place-items:center;
+
+    flex-shrink:0;
+
+    border:0;
+
+    border-radius:50%;
+
+    background:transparent;
+
+    color:#5f6368;
+
+    font-size:23px;
+
+    cursor:pointer;
 }
 
+.close:hover{
+    background:#f1f3f4;
+}
+
+/* =========================================================
+   VIEW TABS
+========================================================= */
+
 .view-tabs{
-  display:flex;
-  gap:7px;
-  padding:12px 18px;
-  border-bottom:1px solid var(--line);
-  background:rgba(255,255,255,.015);
+    flex-shrink:0;
+
+    display:flex;
+    align-items:center;
+
+    gap:7px;
+
+    padding:10px 18px;
+
+    background:#fff;
+
+    border-bottom:1px solid #e5e7eb;
 }
 
 .view-btn{
-  min-height:36px;
-  padding:0 12px;
-  font-size:11px;
+    min-height:34px;
+
+    padding:0 13px;
+
+    border-radius:8px;
+
+    color:#5f6368;
+
+    background:#fff;
+
+    border:1px solid #dadce0;
+
+    font-size:11px;
+}
+
+.view-btn:hover{
+    background:#f8f9fa;
+
+    transform:none;
 }
 
 .view-btn.active{
-  background:linear-gradient(135deg,var(--blue),#3168e9);
-  border-color:transparent;
+    background:#e8f0fe;
+
+    border-color:#d2e3fc;
+
+    color:#1967d2;
+
+    transform:none;
 }
 
-.modal-body{
-  padding:20px;
+/* =========================================================
+   EMAIL BODY
+========================================================= */
+
+.email-body-wrapper{
+    flex:1;
+
+    min-height:0;
+
+    overflow:auto;
+
+    background:#fff;
 }
 
-.email-info{
-  display:grid;
-  gap:10px;
-  margin-bottom:18px;
+.email-body{
+    padding:24px 25px 40px;
+
+    color:#202124;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size:14px;
+
+    line-height:1.65;
+
+    word-break:break-word;
+
+    overflow-wrap:anywhere;
 }
 
-.email-info-row{
-  display:flex;
-  gap:10px;
-  font-size:12px;
+.email-body img{
+    max-width:100%;
+    height:auto;
 }
 
-.email-info-label{
-  width:55px;
-  flex-shrink:0;
-  color:#8995a8;
+.email-body table{
+    max-width:100%;
 }
 
-.email-info-value{
-  color:#e9eef7;
-  word-break:break-word;
+.email-body pre{
+    max-width:100%;
+
+    overflow:auto;
+
+    white-space:pre-wrap;
+
+    word-break:break-word;
 }
 
-/* ================= HTML EMAIL ================= */
+.email-body blockquote{
+    border-left:
+        3px solid #dadce0;
 
-.email-frame{
-  width:100%;
-  min-height:380px;
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:14px;
-  background:#fff;
-  display:block;
+    margin-left:0;
+
+    padding-left:13px;
+
+    color:#5f6368;
 }
 
-/* ================= TEXT EMAIL ================= */
+/* =========================================================
+   GMAIL-LIKE URL
+========================================================= */
+
+.gmail-link-wrapper{
+    display:inline;
+
+    word-break:break-all;
+}
+
+.gmail-link{
+    color:#1a73e8;
+
+    text-decoration:none;
+
+    font-weight:400;
+
+    word-break:break-all;
+}
+
+.gmail-link:hover{
+    text-decoration:underline;
+}
+
+.url-copy{
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    width:24px;
+    height:24px;
+
+    margin-left:4px;
+
+    padding:0;
+
+    border:0;
+
+    border-radius:6px;
+
+    background:transparent;
+
+    color:#5f6368;
+
+    font-size:13px;
+
+    vertical-align:middle;
+
+    cursor:pointer;
+}
+
+.url-copy:hover{
+    background:#f1f3f4;
+
+    color:#1a73e8;
+}
+
+/* =========================================================
+   TEXT VIEW
+========================================================= */
 
 .text-view{
-  background:#070c15;
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:14px;
-  padding:16px;
-  color:#dce5f2;
-  font-family:"Courier New",monospace;
-  font-size:12px;
-  line-height:1.7;
-  white-space:pre-wrap;
-  word-break:break-word;
-  max-height:60vh;
-  overflow:auto;
+    white-space:pre-wrap;
+
+    color:#202124;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size:14px;
+
+    line-height:1.65;
+
+    word-break:break-word;
+
+    overflow-wrap:anywhere;
 }
 
 .text-view a{
-  color:#66a1ff;
-  text-decoration:underline;
-  word-break:break-all;
+    color:#1a73e8;
+
+    text-decoration:none;
+
+    word-break:break-all;
 }
 
-/* ================= TOAST ================= */
-
-.toast{
-  position:fixed;
-  bottom:22px;
-  left:50%;
-  transform:translate(-50%,20px);
-  opacity:0;
-  pointer-events:none;
-  background:#101a29;
-  border:1px solid var(--line);
-  padding:12px 16px;
-  border-radius:13px;
-  color:#fff;
-  font-size:12px;
-  box-shadow:var(--shadow);
-  transition:.25s;
-  z-index:100;
+.text-view a:hover{
+    text-decoration:underline;
 }
 
-.toast.show{
-  opacity:1;
-  transform:translate(-50%,0);
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading{
+    min-height:270px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
 }
 
-/* ================= LOADER ================= */
+.spinner{
+    width:27px;
+    height:27px;
 
-.loader{
-  width:25px;
-  height:25px;
-  border:2px solid rgba(255,255,255,.1);
-  border-top-color:var(--cyan);
-  border-radius:50%;
-  animation:spin .7s linear infinite;
+    border:3px solid #e5e7eb;
+
+    border-top-color:#1a73e8;
+
+    border-radius:50%;
+
+    animation:
+        spin .7s linear infinite;
 }
 
 @keyframes spin{
-  to{
-    transform:rotate(360deg);
-  }
+    to{
+        transform:rotate(360deg);
+    }
 }
 
-/* ================= MOBILE ================= */
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+    position:fixed;
+
+    left:50%;
+    bottom:22px;
+
+    z-index:300;
+
+    padding:11px 16px;
+
+    border-radius:12px;
+
+    background:#111827;
+
+    border:1px solid
+        rgba(255,255,255,.08);
+
+    color:#fff;
+
+    font-size:11px;
+
+    box-shadow:var(--shadow);
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transform:
+        translate(-50%,20px);
+
+    transition:.25s;
+}
+
+.toast.show{
+    opacity:1;
+
+    transform:
+        translate(-50%,0);
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media(max-width:650px){
 
-  .app{
-    padding-top:18px;
-  }
+    .app{
+        width:94%;
 
-  .hero{
-    padding-top:20px;
-  }
+        padding-top:17px;
+    }
 
-  .hero h1{
-    letter-spacing:-1.8px;
-  }
+    .hero{
+        padding-top:18px;
+    }
 
-  .email-row{
-    flex-direction:column;
-  }
+    .hero h1{
+        letter-spacing:-2px;
+    }
 
-  .actions{
-    width:100%;
-  }
+    .email-row{
+        flex-direction:column;
+    }
 
-  .actions .btn{
-    flex:1;
-  }
+    .actions{
+        width:100%;
+    }
 
-  .mail-meta{
-    align-items:flex-start;
-    flex-direction:column;
-  }
+    .actions .btn{
+        flex:1;
+    }
 
-  .message-top{
-    flex-direction:column;
-    gap:5px;
-  }
+    .mail-meta{
+        flex-direction:column;
+        align-items:flex-start;
+    }
 
-  .date{
-    white-space:normal;
-  }
+    .message-top{
+        flex-direction:column;
+        gap:5px;
+    }
 
-  .modal{
-    padding:10px;
-  }
+    .date{
+        white-space:normal;
+    }
 
-  .modal-card{
-    max-height:94vh;
-    border-radius:18px;
-  }
+    .modal{
+        padding:0;
+    }
 
-  .modal-body{
-    padding:14px;
-  }
+    .modal-card{
+        width:100%;
+
+        height:100%;
+
+        max-height:100vh;
+
+        border-radius:0;
+    }
+
+    .email-header{
+        padding:
+            15px 15px 13px;
+    }
+
+    .email-subject{
+        font-size:18px;
+    }
+
+    .email-body{
+        padding:
+            20px 17px 35px;
+    }
 
 }
 </style>
 </head>
 
+
 <body>
 
 <div class="app">
 
-  <!-- TOPBAR -->
+    <!-- =====================================================
+         TOPBAR
+    ====================================================== -->
 
-  <header class="topbar">
+    <header class="topbar">
 
-    <div class="logo">
+        <div class="logo">
 
-      <div class="logo-icon">
-        ✉
-      </div>
+            <div class="logo-icon">
+                ✉
+            </div>
 
-      <span>NEONMAIL</span>
+            <span>
+                NEONMAIL
+            </span>
 
-    </div>
+        </div>
 
-    <div class="status">
+        <div class="status">
 
-      <span class="dot"></span>
+            <span class="status-dot"></span>
 
-      API ONLINE
+            API ONLINE
 
-    </div>
+        </div>
 
-  </header>
-
-
-  <!-- HERO -->
-
-  <section class="hero">
-
-    <h1>
-      Temporary <span>Inbox</span>
-    </h1>
-
-    <p>
-      Buat email sementara, terima pesan secara realtime,
-      dan buka isi email dalam HTML View maupun Text View.
-    </p>
-
-  </section>
+    </header>
 
 
-  <!-- MAILBOX -->
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
 
-  <section class="mail-card">
+    <section class="hero">
 
-    <div class="mail-head">
+        <h1>
+            Temporary
+            <span>Inbox</span>
+        </h1>
 
-      <div class="mail-label">
-        Your temporary address
-      </div>
+        <p>
+            Disposable email dengan inbox realtime,
+            session browser, dan email reader bergaya Gmail.
+        </p>
 
-      <div class="email-row">
+    </section>
+
+
+    <!-- =====================================================
+         MAILBOX
+    ====================================================== -->
+
+    <section class="mail-card">
+
+        <div class="mail-head">
+
+            <div class="mail-label">
+                Temporary email address
+            </div>
+
+            <div class="email-row">
+
+                <div
+                    class="email-box"
+                    id="emailAddress"
+                >
+                    Belum ada mailbox
+                </div>
+
+                <div class="actions">
+
+                    <button
+                        class="btn"
+                        id="copyBtn"
+                        onclick="copyEmail()"
+                        disabled
+                    >
+                        Copy
+                    </button>
+
+                    <button
+                        class="btn primary"
+                        id="generateBtn"
+                        onclick="createMailbox()"
+                    >
+                        Generate
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="mail-meta">
+
+                <div class="expiry">
+
+                    Status:
+                    <strong id="mailStatus">
+                        Belum aktif
+                    </strong>
+
+                    &nbsp;·&nbsp;
+
+                    Expiry:
+                    <strong id="countdown">
+                        --:--
+                    </strong>
+
+                </div>
+
+                <button
+                    class="btn danger"
+                    id="deleteBtn"
+                    onclick="deleteMailbox()"
+                    disabled
+                >
+                    Delete Mailbox
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         INBOX
+    ====================================================== -->
+
+    <section class="inbox">
+
+        <div class="inbox-head">
+
+            <div class="inbox-title">
+
+                <h2>
+                    Inbox
+                </h2>
+
+                <span
+                    class="badge"
+                    id="messageCount"
+                >
+                    0
+                </span>
+
+            </div>
+
+            <button
+                class="btn"
+                id="refreshBtn"
+                onclick="refreshInbox()"
+                disabled
+            >
+                ↻ Refresh
+            </button>
+
+        </div>
+
 
         <div
-          class="email-box"
-          id="emailAddress"
+            class="message-list"
+            id="messageList"
         >
-          Belum ada mailbox
-        </div>
 
-        <div class="actions">
+            <div class="empty">
 
-          <button
-            class="btn"
-            id="copyBtn"
-            onclick="copyEmail()"
-            disabled
-          >
-            Copy
-          </button>
+                <div class="empty-icon">
+                    ✉
+                </div>
 
-          <button
-            class="btn primary"
-            id="generateBtn"
-            onclick="createMailbox()"
-          >
-            Generate
-          </button>
+                <strong>
+                    Inbox masih kosong
+                </strong>
+
+                <span>
+                    Generate mailbox untuk mulai menerima email.
+                </span>
+
+            </div>
 
         </div>
 
-      </div>
-
-
-      <div class="mail-meta">
-
-        <div class="expiry">
-
-          Status:
-          <strong id="mailStatus">
-            Belum aktif
-          </strong>
-
-          · Expiry:
-
-          <strong id="countdown">
-            --:--
-          </strong>
-
-        </div>
-
-        <button
-          class="btn danger"
-          id="deleteBtn"
-          onclick="deleteMailbox()"
-          disabled
-        >
-          Delete Mailbox
-        </button>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- INBOX -->
-
-  <section class="inbox">
-
-    <div class="inbox-head">
-
-      <div class="inbox-title">
-
-        <h2>
-          Inbox
-        </h2>
-
-        <span
-          class="badge"
-          id="messageCount"
-        >
-          0
-        </span>
-
-      </div>
-
-      <button
-        class="btn"
-        id="refreshBtn"
-        onclick="refreshInbox()"
-        disabled
-      >
-        ↻ Refresh
-      </button>
-
-    </div>
-
-
-    <div
-      class="message-list"
-      id="messageList"
-    >
-
-      <div class="empty">
-
-        <div class="empty-icon">
-          ✉
-        </div>
-
-        <strong>
-          Inbox masih kosong
-        </strong>
-
-        <span>
-          Generate mailbox untuk mulai menerima email.
-        </span>
-
-      </div>
-
-    </div>
-
-  </section>
+    </section>
 
 </div>
 
 
-<!-- ================= EMAIL MODAL ================= -->
+<!-- =========================================================
+     EMAIL READER
+========================================================= -->
 
 <div
-  class="modal"
-  id="emailModal"
+    class="modal"
+    id="emailModal"
 >
 
-  <div class="modal-card">
+    <div class="modal-card">
 
-    <div class="modal-head">
 
-      <div style="min-width:0">
+        <!-- EMAIL HEADER -->
 
-        <h3 id="modalSubject">
-          Email
-        </h3>
+        <div class="email-header">
+
+            <div
+                style="
+                    display:flex;
+                    justify-content:space-between;
+                    gap:15px;
+                "
+            >
+
+                <div
+                    class="email-subject"
+                    id="modalSubject"
+                >
+                    Email
+                </div>
+
+                <button
+                    class="close"
+                    onclick="closeModal()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="email-sender-row">
+
+                <div
+                    class="sender-avatar"
+                    id="senderAvatar"
+                >
+                    ?
+                </div>
+
+
+                <div class="sender-info">
+
+                    <div
+                        class="sender-name"
+                        id="modalSenderName"
+                    >
+                        Unknown sender
+                    </div>
+
+                    <div
+                        class="sender-address"
+                        id="modalSenderAddress"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="email-date"
+                    id="modalDate"
+                >
+                    -
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- VIEW SWITCH -->
+
+        <div class="view-tabs">
+
+            <button
+                class="btn view-btn active"
+                id="htmlViewBtn"
+                onclick="switchEmailView('html')"
+            >
+                HTML View
+            </button>
+
+            <button
+                class="btn view-btn"
+                id="textViewBtn"
+                onclick="switchEmailView('text')"
+            >
+                Text View
+            </button>
+
+        </div>
+
+
+        <!-- EMAIL CONTENT -->
 
         <div
-          class="modal-sender"
-          id="modalSender"
-        ></div>
+            class="email-body-wrapper"
+            id="emailBodyWrapper"
+        >
 
-      </div>
+            <div
+                class="email-body"
+                id="modalBody"
+            ></div>
 
-      <button
-        class="close"
-        onclick="closeModal()"
-      >
-        ×
-      </button>
+        </div>
 
     </div>
-
-
-    <!-- VIEW SWITCH -->
-
-    <div class="view-tabs">
-
-      <button
-        class="btn view-btn active"
-        id="htmlViewBtn"
-        onclick="switchEmailView('html')"
-      >
-        HTML View
-      </button>
-
-      <button
-        class="btn view-btn"
-        id="textViewBtn"
-        onclick="switchEmailView('text')"
-      >
-        Text View
-      </button>
-
-    </div>
-
-
-    <div
-      class="modal-body"
-      id="modalBody"
-    ></div>
-
-  </div>
 
 </div>
 
@@ -846,8 +1391,8 @@ button{
 <!-- TOAST -->
 
 <div
-  class="toast"
-  id="toast"
+    class="toast"
+    id="toast"
 ></div>
 
 
@@ -855,13 +1400,14 @@ button{
 
 /* =========================================================
    CONFIG
-   ========================================================= */
+========================================================= */
 
 const API =
-  "https://tempy.email/api/v1";
+    "https://tempy.email/api/v1";
 
 const STORAGE_KEY =
-  "neonmail_session_v2";
+    "neonmail_session_v3";
+
 
 let session = null;
 
@@ -877,2053 +1423,2055 @@ let toastTimer = null;
 
 
 /* =========================================================
-   LOCAL SESSION
-   ========================================================= */
+   STORAGE
+========================================================= */
 
 function saveSession(){
 
-  if(!session){
+    if(!session){
 
-    localStorage.removeItem(
-      STORAGE_KEY
+        localStorage.removeItem(
+            STORAGE_KEY
+        );
+
+        return;
+    }
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(session)
     );
-
-    return;
-  }
-
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(session)
-  );
 
 }
 
 
 function loadSession(){
 
-  try{
+    try{
 
-    const raw =
-      localStorage.getItem(
-        STORAGE_KEY
-      );
+        const raw =
+            localStorage.getItem(
+                STORAGE_KEY
+            );
 
-    if(!raw){
-      return;
+        if(!raw){
+            return;
+        }
+
+        const saved =
+            JSON.parse(raw);
+
+        if(
+            saved &&
+            saved.email
+        ){
+
+            session =
+                saved;
+
+        }
+
+    }catch(error){
+
+        console.warn(
+            "Session error:",
+            error
+        );
+
+        localStorage.removeItem(
+            STORAGE_KEY
+        );
+
     }
-
-    const saved =
-      JSON.parse(raw);
-
-    if(
-      saved &&
-      saved.email
-    ){
-
-      session = saved;
-
-    }
-
-  }catch(error){
-
-    console.warn(
-      "Session error:",
-      error
-    );
-
-    localStorage.removeItem(
-      STORAGE_KEY
-    );
-
-  }
 
 }
 
 
 /* =========================================================
-   API REQUEST
-   ========================================================= */
+   API
+========================================================= */
 
 async function apiFetch(
-  url,
-  options = {}
+    url,
+    options = {}
 ){
 
-  const response =
-    await fetch(
-      url,
-      {
-        ...options,
+    const response =
+        await fetch(
+            url,
+            {
+                ...options,
 
-        headers:{
-          "Accept":
-            "application/json",
+                headers:{
+                    "Accept":
+                        "application/json",
 
-          ...(options.headers || {})
-        }
-      }
-    );
-
-  let data = null;
-
-  try{
-
-    data =
-      await response.json();
-
-  }catch(error){
-
-    data = null;
-
-  }
+                    ...(options.headers || {})
+                }
+            }
+        );
 
 
-  if(!response.ok){
+    let data = null;
 
-    let message =
-      "API request gagal";
 
-    if(data){
+    try{
 
-      message =
-        data.message ||
-        data.error ||
-        data.detail ||
-        message;
+        data =
+            await response.json();
+
+    }catch(error){
+
+        data = null;
 
     }
 
-    throw new Error(
-      message
-    );
 
-  }
+    if(!response.ok){
 
-  return data;
+        throw new Error(
+            data?.message ||
+            data?.error ||
+            data?.detail ||
+            `HTTP ${response.status}`
+        );
+
+    }
+
+
+    return data;
 
 }
 
 
 /* =========================================================
    CREATE MAILBOX
-   ========================================================= */
+========================================================= */
 
 async function createMailbox(){
 
-  const button =
-    document.getElementById(
-      "generateBtn"
-    );
-
-  button.disabled = true;
-
-  button.textContent =
-    "Creating...";
+    const button =
+        document.getElementById(
+            "generateBtn"
+        );
 
 
-  try{
+    button.disabled = true;
 
-    const data =
-      await apiFetch(
-        `${API}/mailbox`,
-        {
-          method:"POST"
+    button.textContent =
+        "Creating...";
+
+
+    try{
+
+        const data =
+            await apiFetch(
+                `${API}/mailbox`,
+                {
+                    method:"POST"
+                }
+            );
+
+
+        const email =
+            data?.email ||
+            data?.address ||
+            data?.mailbox?.email ||
+            data?.mailbox?.address;
+
+
+        if(!email){
+
+            throw new Error(
+                "API tidak mengembalikan email."
+            );
+
         }
-      );
 
 
-    /*
-      Support beberapa bentuk response
-    */
+        const expiresAt =
+            data?.expiresAt ||
+            data?.expires_at ||
+            data?.mailbox?.expiresAt ||
+            data?.mailbox?.expires_at ||
+            new Date(
+                Date.now() + 600000
+            ).toISOString();
 
-    const email =
-      data?.email ||
-      data?.address ||
-      data?.mailbox?.email ||
-      data?.mailbox?.address;
+
+        session = {
+
+            email,
+
+            expiresAt
+
+        };
 
 
-    if(!email){
+        messages = [];
 
-      throw new Error(
-        "API tidak mengembalikan alamat email."
-      );
+
+        saveSession();
+
+        renderSession();
+
+        renderMessages();
+
+        startTimers();
+
+
+        showToast(
+            "Mailbox berhasil dibuat"
+        );
+
+
+        await refreshInbox();
+
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast(
+            error.message ||
+            "Gagal membuat mailbox"
+        );
+
+    }finally{
+
+        button.disabled = false;
+
+        button.textContent =
+            "Generate";
+
+    }
+
+}
+
+
+/* =========================================================
+   REFRESH
+========================================================= */
+
+async function refreshInbox(){
+
+    if(
+        !session ||
+        !session.email
+    ){
+
+        return;
 
     }
 
 
-    const expiresAt =
-      data?.expiresAt ||
-      data?.expires_at ||
-      data?.mailbox?.expiresAt ||
-      data?.mailbox?.expires_at ||
-      new Date(
-        Date.now() + 600000
-      ).toISOString();
+    const button =
+        document.getElementById(
+            "refreshBtn"
+        );
 
 
-    session = {
+    button.disabled = true;
 
-      email:email,
+    button.textContent =
+        "Loading...";
 
-      expiresAt:expiresAt
 
-    };
+    try{
 
+        const email =
+            encodeURIComponent(
+                session.email
+            );
+
+
+        const data =
+            await apiFetch(
+                `${API}/mailbox/${email}/messages`
+            );
+
+
+        if(Array.isArray(data)){
+
+            messages = data;
+
+        }else if(
+            Array.isArray(
+                data?.messages
+            )
+        ){
+
+            messages =
+                data.messages;
+
+        }else if(
+            Array.isArray(
+                data?.emails
+            )
+        ){
+
+            messages =
+                data.emails;
+
+        }else{
+
+            messages = [];
+
+        }
+
+
+        renderMessages();
+
+
+    }catch(error){
+
+        console.error(error);
+
+
+        if(
+            /expired|not found|inactive|deactivated/i
+                .test(
+                    error.message || ""
+                )
+        ){
+
+            clearMailbox();
+
+            showToast(
+                "Mailbox sudah expired."
+            );
+
+        }else{
+
+            showToast(
+                error.message ||
+                "Gagal mengambil inbox"
+            );
+
+        }
+
+    }finally{
+
+        button.disabled =
+            !session;
+
+        button.textContent =
+            "↻ Refresh";
+
+    }
+
+}
+
+
+/* =========================================================
+   SILENT REFRESH
+========================================================= */
+
+async function refreshInboxSilent(){
+
+    if(
+        !session ||
+        !session.email
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        const email =
+            encodeURIComponent(
+                session.email
+            );
+
+
+        const data =
+            await apiFetch(
+                `${API}/mailbox/${email}/messages`
+            );
+
+
+        if(Array.isArray(data)){
+
+            messages = data;
+
+        }else if(
+            Array.isArray(
+                data?.messages
+            )
+        ){
+
+            messages =
+                data.messages;
+
+        }else if(
+            Array.isArray(
+                data?.emails
+            )
+        ){
+
+            messages =
+                data.emails;
+
+        }else{
+
+            messages = [];
+
+        }
+
+
+        renderMessages();
+
+
+    }catch(error){
+
+        console.warn(
+            "Auto refresh:",
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+async function deleteMailbox(){
+
+    if(
+        !session ||
+        !session.email
+    ){
+
+        return;
+
+    }
+
+
+    const ok =
+        confirm(
+            "Hapus mailbox ini?\n\nSemua email di mailbox akan ikut terhapus."
+        );
+
+
+    if(!ok){
+        return;
+    }
+
+
+    const button =
+        document.getElementById(
+            "deleteBtn"
+        );
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Deleting...";
+
+
+    try{
+
+        const email =
+            encodeURIComponent(
+                session.email
+            );
+
+
+        await apiFetch(
+            `${API}/mailbox/${email}`,
+            {
+                method:"DELETE"
+            }
+        );
+
+
+        clearMailbox();
+
+
+        showToast(
+            "Mailbox berhasil dihapus"
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+
+        if(
+            /expired|not found|inactive|deactivated/i
+                .test(
+                    error.message || ""
+                )
+        ){
+
+            clearMailbox();
+
+            showToast(
+                "Mailbox sudah tidak aktif"
+            );
+
+        }else{
+
+            showToast(
+                error.message ||
+                "Gagal menghapus mailbox"
+            );
+
+        }
+
+    }finally{
+
+        button.disabled =
+            !session;
+
+        button.textContent =
+            "Delete Mailbox";
+
+    }
+
+}
+
+
+/* =========================================================
+   CLEAR
+========================================================= */
+
+function clearMailbox(){
+
+    session = null;
 
     messages = [];
 
-    saveSession();
+    currentEmail = null;
+
+
+    localStorage.removeItem(
+        STORAGE_KEY
+    );
+
+
+    stopTimers();
 
     renderSession();
 
     renderMessages();
-
-    startTimers();
-
-    showToast(
-      "Mailbox berhasil dibuat"
-    );
-
-
-    await refreshInbox();
-
-
-  }catch(error){
-
-    console.error(error);
-
-    showToast(
-      error.message ||
-      "Gagal membuat mailbox"
-    );
-
-  }finally{
-
-    button.disabled = false;
-
-    button.textContent =
-      "Generate";
-
-  }
-
-}
-
-
-/* =========================================================
-   REFRESH INBOX
-   ========================================================= */
-
-async function refreshInbox(){
-
-  if(
-    !session ||
-    !session.email
-  ){
-
-    return;
-
-  }
-
-
-  const button =
-    document.getElementById(
-      "refreshBtn"
-    );
-
-  button.disabled = true;
-
-  button.textContent =
-    "Loading...";
-
-
-  try{
-
-    const encoded =
-      encodeURIComponent(
-        session.email
-      );
-
-
-    const data =
-      await apiFetch(
-        `${API}/mailbox/${encoded}/messages`
-      );
-
-
-    if(Array.isArray(data)){
-
-      messages = data;
-
-    }else if(
-      Array.isArray(
-        data?.messages
-      )
-    ){
-
-      messages =
-        data.messages;
-
-    }else if(
-      Array.isArray(
-        data?.emails
-      )
-    ){
-
-      messages =
-        data.emails;
-
-    }else{
-
-      messages = [];
-
-    }
-
-
-    renderMessages();
-
-
-  }catch(error){
-
-    console.error(error);
-
-    if(
-      /expired|not found|inactive|deactivated/i
-        .test(
-          error.message || ""
-        )
-    ){
-
-      clearMailbox();
-
-      showToast(
-        "Mailbox sudah expired."
-      );
-
-    }else{
-
-      showToast(
-        error.message ||
-        "Gagal mengambil inbox"
-      );
-
-    }
-
-  }finally{
-
-    button.disabled =
-      !session;
-
-    button.textContent =
-      "↻ Refresh";
-
-  }
-
-}
-
-
-/* =========================================================
-   SILENT AUTO REFRESH
-   ========================================================= */
-
-async function refreshInboxSilent(){
-
-  if(
-    !session ||
-    !session.email
-  ){
-
-    return;
-
-  }
-
-
-  try{
-
-    const encoded =
-      encodeURIComponent(
-        session.email
-      );
-
-
-    const data =
-      await apiFetch(
-        `${API}/mailbox/${encoded}/messages`
-      );
-
-
-    if(Array.isArray(data)){
-
-      messages = data;
-
-    }else if(
-      Array.isArray(
-        data?.messages
-      )
-    ){
-
-      messages =
-        data.messages;
-
-    }else if(
-      Array.isArray(
-        data?.emails
-      )
-    ){
-
-      messages =
-        data.emails;
-
-    }else{
-
-      messages = [];
-
-    }
-
-
-    renderMessages();
-
-
-  }catch(error){
-
-    console.warn(
-      "Auto refresh:",
-      error.message
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   DELETE MAILBOX
-   ========================================================= */
-
-async function deleteMailbox(){
-
-  if(
-    !session ||
-    !session.email
-  ){
-
-    return;
-
-  }
-
-
-  if(
-    !confirm(
-      "Hapus mailbox ini?\n\nSemua email pada mailbox ini akan ikut hilang."
-    )
-  ){
-
-    return;
-
-  }
-
-
-  const button =
-    document.getElementById(
-      "deleteBtn"
-    );
-
-  button.disabled = true;
-
-  button.textContent =
-    "Deleting...";
-
-
-  try{
-
-    const encoded =
-      encodeURIComponent(
-        session.email
-      );
-
-
-    await apiFetch(
-      `${API}/mailbox/${encoded}`,
-      {
-        method:"DELETE"
-      }
-    );
-
-
-    clearMailbox();
-
-    showToast(
-      "Mailbox berhasil dihapus"
-    );
-
-
-  }catch(error){
-
-    console.error(error);
-
-
-    if(
-      /expired|not found|inactive|deactivated/i
-        .test(
-          error.message || ""
-        )
-    ){
-
-      clearMailbox();
-
-      showToast(
-        "Mailbox sudah tidak aktif"
-      );
-
-    }else{
-
-      showToast(
-        error.message ||
-        "Gagal menghapus mailbox"
-      );
-
-    }
-
-  }finally{
-
-    button.disabled =
-      !session;
-
-    button.textContent =
-      "Delete Mailbox";
-
-  }
-
-}
-
-
-/* =========================================================
-   CLEAR MAILBOX
-   ========================================================= */
-
-function clearMailbox(){
-
-  session = null;
-
-  messages = [];
-
-  currentEmail = null;
-
-  localStorage.removeItem(
-    STORAGE_KEY
-  );
-
-  stopTimers();
-
-  renderSession();
-
-  renderMessages();
 
 }
 
 
 /* =========================================================
    COPY EMAIL
-   ========================================================= */
+========================================================= */
 
 async function copyEmail(){
 
-  if(
-    !session ||
-    !session.email
-  ){
+    if(
+        !session ||
+        !session.email
+    ){
 
-    return;
+        return;
 
-  }
+    }
 
 
-  try{
-
-    await navigator.clipboard.writeText(
-      session.email
+    await copyText(
+        session.email,
+        "Email berhasil disalin"
     );
 
-    showToast(
-      "Email berhasil disalin"
+}
+
+
+/* =========================================================
+   COPY URL
+========================================================= */
+
+async function copyURL(
+    event,
+    url
+){
+
+    if(event){
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+    }
+
+
+    await copyText(
+        url,
+        "URL berhasil disalin"
     );
 
-  }catch(error){
+}
 
-    const input =
-      document.createElement(
-        "input"
-      );
 
-    input.value =
-      session.email;
+/* =========================================================
+   COPY HELPER
+========================================================= */
 
-    document.body.appendChild(
-      input
-    );
+async function copyText(
+    text,
+    successMessage
+){
 
-    input.select();
+    try{
 
-    document.execCommand(
-      "copy"
-    );
+        if(
+            navigator.clipboard &&
+            window.isSecureContext
+        ){
 
-    input.remove();
+            await navigator.clipboard.writeText(
+                text
+            );
 
-    showToast(
-      "Email berhasil disalin"
-    );
+        }else{
 
-  }
+            const input =
+                document.createElement(
+                    "textarea"
+                );
+
+            input.value =
+                text;
+
+            input.style.position =
+                "fixed";
+
+            input.style.opacity =
+                "0";
+
+            document.body.appendChild(
+                input
+            );
+
+            input.focus();
+
+            input.select();
+
+            document.execCommand(
+                "copy"
+            );
+
+            input.remove();
+
+        }
+
+
+        showToast(
+            successMessage
+        );
+
+
+    }catch(error){
+
+        showToast(
+            "Gagal menyalin"
+        );
+
+    }
 
 }
 
 
 /* =========================================================
    RENDER SESSION
-   ========================================================= */
+========================================================= */
 
 function renderSession(){
 
-  const email =
-    document.getElementById(
-      "emailAddress"
-    );
-
-  const copy =
-    document.getElementById(
-      "copyBtn"
-    );
-
-  const del =
-    document.getElementById(
-      "deleteBtn"
-    );
-
-  const refresh =
-    document.getElementById(
-      "refreshBtn"
-    );
-
-  const status =
-    document.getElementById(
-      "mailStatus"
-    );
+    const email =
+        document.getElementById(
+            "emailAddress"
+        );
 
 
-  if(
-    session &&
-    session.email
-  ){
-
-    email.textContent =
-      session.email;
-
-    copy.disabled = false;
-
-    del.disabled = false;
-
-    refresh.disabled = false;
-
-    status.textContent =
-      "Aktif";
-
-  }else{
-
-    email.textContent =
-      "Belum ada mailbox";
-
-    copy.disabled = true;
-
-    del.disabled = true;
-
-    refresh.disabled = true;
-
-    status.textContent =
-      "Belum aktif";
-
-    document.getElementById(
-      "countdown"
-    ).textContent =
-      "--:--";
-
-  }
-
-}
+    const copy =
+        document.getElementById(
+            "copyBtn"
+        );
 
 
-/* =========================================================
-   RENDER MESSAGES
-   ========================================================= */
-
-function renderMessages(){
-
-  const container =
-    document.getElementById(
-      "messageList"
-    );
-
-  const count =
-    document.getElementById(
-      "messageCount"
-    );
+    const del =
+        document.getElementById(
+            "deleteBtn"
+        );
 
 
-  count.textContent =
-    messages.length;
+    const refresh =
+        document.getElementById(
+            "refreshBtn"
+        );
 
 
-  if(!messages.length){
-
-    container.innerHTML = `
-
-      <div class="empty">
-
-        <div class="empty-icon">
-          ✉
-        </div>
-
-        <strong>
-          Belum ada email
-        </strong>
-
-        <span>
-          Email masuk akan muncul otomatis di sini.
-        </span>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
+    const status =
+        document.getElementById(
+            "mailStatus"
+        );
 
 
-  const sorted =
-    sortMessages();
+    if(
+        session &&
+        session.email
+    ){
+
+        email.textContent =
+            session.email;
+
+        copy.disabled = false;
+
+        del.disabled = false;
+
+        refresh.disabled = false;
+
+        status.textContent =
+            "Aktif";
+
+    }else{
+
+        email.textContent =
+            "Belum ada mailbox";
+
+        copy.disabled = true;
+
+        del.disabled = true;
+
+        refresh.disabled = true;
+
+        status.textContent =
+            "Belum aktif";
 
 
-  container.innerHTML =
-    sorted.map(
-      (mail,index) =>
-        createMessageHTML(
-          mail,
-          index
-        )
-    ).join("");
+        document.getElementById(
+            "countdown"
+        ).textContent =
+            "--:--";
+
+    }
 
 }
 
 
 /* =========================================================
    SORT
-   ========================================================= */
+========================================================= */
 
 function sortMessages(){
 
-  return [...messages].sort(
-    (a,b) => {
+    return [...messages].sort(
+        (a,b) => {
 
-      const dateA =
-        new Date(
-          a.received_at ||
-          a.receivedAt ||
-          a.created_at ||
-          a.createdAt ||
-          0
-        );
+            const dateA =
+                new Date(
+                    a.received_at ||
+                    a.receivedAt ||
+                    a.created_at ||
+                    a.createdAt ||
+                    0
+                );
 
-      const dateB =
-        new Date(
-          b.received_at ||
-          b.receivedAt ||
-          b.created_at ||
-          b.createdAt ||
-          0
-        );
 
-      return dateB - dateA;
+            const dateB =
+                new Date(
+                    b.received_at ||
+                    b.receivedAt ||
+                    b.created_at ||
+                    b.createdAt ||
+                    0
+                );
 
-    }
-  );
+
+            return dateB - dateA;
+
+        }
+    );
 
 }
 
 
 /* =========================================================
-   MESSAGE CARD
-   ========================================================= */
+   RENDER INBOX
+========================================================= */
 
-function createMessageHTML(
-  mail,
-  index
+function renderMessages(){
+
+    const container =
+        document.getElementById(
+            "messageList"
+        );
+
+
+    const count =
+        document.getElementById(
+            "messageCount"
+        );
+
+
+    count.textContent =
+        messages.length;
+
+
+    if(!messages.length){
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    ✉
+                </div>
+
+                <strong>
+                    Belum ada email
+                </strong>
+
+                <span>
+                    Email masuk akan muncul otomatis di sini.
+                </span>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const sorted =
+        sortMessages();
+
+
+    container.innerHTML =
+        sorted.map(
+            (mail,index) =>
+                messageHTML(
+                    mail,
+                    index
+                )
+        ).join("");
+
+}
+
+
+/* =========================================================
+   MESSAGE HTML
+========================================================= */
+
+function messageHTML(
+    mail,
+    index
 ){
 
-  const sender =
-    mail.from ||
-    mail.sender ||
-    mail.from_address ||
-    "Unknown sender";
+    const sender =
+        mail.from ||
+        mail.sender ||
+        mail.from_address ||
+        "Unknown sender";
 
 
-  const subject =
-    mail.subject ||
-    "(No subject)";
+    const subject =
+        mail.subject ||
+        "(No subject)";
 
 
-  let preview =
-    mail.body_text ||
-    mail.bodyText ||
-    mail.text ||
-    mail.textBody ||
-    "";
+    let preview =
+        mail.body_text ||
+        mail.bodyText ||
+        mail.text ||
+        mail.textBody ||
+        "";
 
 
-  if(!preview){
+    if(!preview){
 
-    preview =
-      stripHTML(
-        mail.body_html ||
-        mail.bodyHtml ||
-        mail.html ||
-        ""
-      );
+        preview =
+            stripHTML(
+                mail.body_html ||
+                mail.bodyHtml ||
+                mail.html ||
+                ""
+            );
 
-  }
-
-
-  if(!preview){
-
-    preview =
-      "No preview available";
-
-  }
+    }
 
 
-  const date =
-    mail.received_at ||
-    mail.receivedAt ||
-    mail.created_at ||
-    mail.createdAt;
+    if(!preview){
+
+        preview =
+            "No preview available";
+
+    }
 
 
-  return `
+    const date =
+        mail.received_at ||
+        mail.receivedAt ||
+        mail.created_at ||
+        mail.createdAt;
 
-    <div
-      class="message"
-      onclick="openMessage(${index})"
-    >
 
-      <div class="message-top">
+    return `
 
-        <div class="sender">
-          ${escapeHTML(sender)}
+        <div
+            class="message"
+            onclick="openMessage(${index})"
+        >
+
+            <div class="message-top">
+
+                <div class="sender">
+                    ${escapeHTML(sender)}
+                </div>
+
+                <div class="date">
+                    ${escapeHTML(
+                        formatDate(date)
+                    )}
+                </div>
+
+            </div>
+
+
+            <div class="subject">
+                ${escapeHTML(subject)}
+            </div>
+
+
+            <div class="preview">
+                ${escapeHTML(preview)}
+            </div>
+
         </div>
 
-        <div class="date">
-          ${escapeHTML(
-            formatDate(date)
-          )}
-        </div>
-
-      </div>
-
-      <div class="subject">
-        ${escapeHTML(subject)}
-      </div>
-
-      <div class="preview">
-        ${escapeHTML(preview)}
-      </div>
-
-    </div>
-
-  `;
+    `;
 
 }
 
 
 /* =========================================================
    OPEN MESSAGE
-   ========================================================= */
+========================================================= */
 
 function openMessage(index){
 
-  const sorted =
-    sortMessages();
-
-  const mail =
-    sorted[index];
+    const sorted =
+        sortMessages();
 
 
-  if(!mail){
-    return;
-  }
+    const mail =
+        sorted[index];
 
 
-  currentEmail =
-    mail;
+    if(!mail){
+        return;
+    }
 
 
-  document.getElementById(
-    "modalSubject"
-  ).textContent =
-    mail.subject ||
-    "(No subject)";
+    currentEmail =
+        mail;
 
 
-  document.getElementById(
-    "modalSender"
-  ).textContent =
-    mail.from ||
-    mail.sender ||
-    "Unknown sender";
+    const subject =
+        mail.subject ||
+        "(No subject)";
 
 
-  document.getElementById(
-    "emailModal"
-  ).classList.add(
-    "show"
-  );
+    const sender =
+        mail.from ||
+        mail.sender ||
+        mail.from_address ||
+        "Unknown sender";
 
 
-  switchEmailView(
-    "html"
-  );
+    const date =
+        mail.received_at ||
+        mail.receivedAt ||
+        mail.created_at ||
+        mail.createdAt ||
+        "-";
+
+
+    document.getElementById(
+        "modalSubject"
+    ).textContent =
+        subject;
+
+
+    document.getElementById(
+        "modalSenderName"
+    ).textContent =
+        getSenderName(
+            sender
+        );
+
+
+    document.getElementById(
+        "modalSenderAddress"
+    ).textContent =
+        sender;
+
+
+    document.getElementById(
+        "modalDate"
+    ).textContent =
+        formatDate(date);
+
+
+    document.getElementById(
+        "senderAvatar"
+    ).textContent =
+        getAvatarLetter(
+            sender
+        );
+
+
+    document.getElementById(
+        "emailModal"
+    ).classList.add(
+        "show"
+    );
+
+
+    switchEmailView(
+        "html"
+    );
 
 }
 
 
 /* =========================================================
-   SWITCH EMAIL VIEW
-   ========================================================= */
+   SENDER NAME
+========================================================= */
 
-function switchEmailView(
-  view
+function getSenderName(
+    sender
 ){
 
-  if(!currentEmail){
-    return;
-  }
+    const match =
+        String(sender).match(
+            /^(.+?)\s*<[^>]+>/
+        );
 
 
-  const htmlButton =
-    document.getElementById(
-      "htmlViewBtn"
+    if(match){
+
+        return match[1]
+            .replace(
+                /^["']|["']$/g,
+                ""
+            )
+            .trim();
+
+    }
+
+
+    return String(sender)
+        .split("@")[0];
+
+}
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
+
+function getAvatarLetter(
+    sender
+){
+
+    const name =
+        getSenderName(
+            sender
+        );
+
+
+    return (
+        name
+            .trim()
+            .charAt(0)
+            .toUpperCase()
+        ||
+        "?"
     );
 
-  const textButton =
-    document.getElementById(
-      "textViewBtn"
+}
+
+
+/* =========================================================
+   SWITCH VIEW
+========================================================= */
+
+function switchEmailView(
+    view
+){
+
+    if(!currentEmail){
+        return;
+    }
+
+
+    const htmlButton =
+        document.getElementById(
+            "htmlViewBtn"
+        );
+
+
+    const textButton =
+        document.getElementById(
+            "textViewBtn"
+        );
+
+
+    htmlButton.classList.remove(
+        "active"
     );
 
 
-  htmlButton.classList.remove(
-    "active"
-  );
-
-  textButton.classList.remove(
-    "active"
-  );
-
-
-  if(view === "html"){
-
-    htmlButton.classList.add(
-      "active"
+    textButton.classList.remove(
+        "active"
     );
 
-    renderHTMLView();
 
-  }else{
+    if(view === "html"){
 
-    textButton.classList.add(
-      "active"
-    );
+        htmlButton.classList.add(
+            "active"
+        );
 
-    renderTextView();
 
-  }
+        renderHTMLView();
+
+    }else{
+
+        textButton.classList.add(
+            "active"
+        );
+
+
+        renderTextView();
+
+    }
 
 }
 
 
 /* =========================================================
    HTML VIEW
-   ========================================================= */
+========================================================= */
 
 function renderHTMLView(){
 
-  const mail =
-    currentEmail;
+    const mail =
+        currentEmail;
 
 
-  const body =
-    document.getElementById(
-      "modalBody"
-    );
+    const body =
+        document.getElementById(
+            "modalBody"
+        );
 
 
-  const from =
-    mail.from ||
-    mail.sender ||
-    "-";
+    const html =
+        mail.body_html ||
+        mail.bodyHtml ||
+        mail.html ||
+        "";
 
 
-  const to =
-    mail.to ||
-    mail.recipient ||
-    session?.email ||
-    "-";
+    if(!html){
 
+        renderTextView();
 
-  const date =
-    mail.received_at ||
-    mail.receivedAt ||
-    mail.created_at ||
-    mail.createdAt ||
-    "-";
+        document.getElementById(
+            "htmlViewBtn"
+        ).classList.remove(
+            "active"
+        );
 
 
-  const html =
-    mail.body_html ||
-    mail.bodyHtml ||
-    mail.html ||
-    "";
+        document.getElementById(
+            "textViewBtn"
+        ).classList.add(
+            "active"
+        );
 
 
-  if(!html){
+        return;
 
-    renderTextView();
+    }
 
-    document.getElementById(
-      "htmlViewBtn"
-    ).classList.remove(
-      "active"
-    );
 
-    document.getElementById(
-      "textViewBtn"
-    ).classList.add(
-      "active"
-    );
+    /*
+        HTML email disanitasi terlebih dahulu.
+        Script/event handler dibuang.
+    */
 
-    return;
-
-  }
-
-
-  body.innerHTML = `
-
-    <div class="email-info">
-
-      <div class="email-info-row">
-
-        <div class="email-info-label">
-          From
-        </div>
-
-        <div class="email-info-value">
-          ${escapeHTML(from)}
-        </div>
-
-      </div>
-
-
-      <div class="email-info-row">
-
-        <div class="email-info-label">
-          To
-        </div>
-
-        <div class="email-info-value">
-          ${escapeHTML(to)}
-        </div>
-
-      </div>
-
-
-      <div class="email-info-row">
-
-        <div class="email-info-label">
-          Date
-        </div>
-
-        <div class="email-info-value">
-          ${escapeHTML(
-            formatDate(date)
-          )}
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <iframe
-      class="email-frame"
-      id="emailHTMLFrame"
-      sandbox="allow-popups allow-popups-to-escape-sandbox"
-    ></iframe>
-
-  `;
-
-
-  const frame =
-    document.getElementById(
-      "emailHTMLFrame"
-    );
-
-
-  /*
-    srcdoc dipakai agar HTML email
-    tetap terisolasi dari halaman utama.
-
-    Link:
-      <a href="https://...">
-
-    tetap dapat diklik.
-
-    JavaScript email tidak diberikan
-    akses ke parent page.
-  */
-
-
-  frame.srcdoc = `
-
-    <!DOCTYPE html>
-
-    <html>
-
-    <head>
-
-      <meta charset="UTF-8">
-
-      <meta
-        name="viewport"
-        content="width=device-width,initial-scale=1.0"
-      >
-
-      <style>
-
-        *{
-          box-sizing:border-box;
-        }
-
-        body{
-
-          margin:0;
-
-          padding:20px;
-
-          font-family:
-            Arial,
-            Helvetica,
-            sans-serif;
-
-          font-size:14px;
-
-          line-height:1.6;
-
-          color:#202124;
-
-          background:#fff;
-
-          overflow-wrap:anywhere;
-
-        }
-
-        img{
-
-          max-width:100%;
-
-          height:auto;
-
-        }
-
-        table{
-
-          max-width:100%;
-
-        }
-
-        td,th{
-
-          max-width:100%;
-
-        }
-
-        a{
-
-          color:#1967d2;
-
-          text-decoration:underline;
-
-          word-break:break-all;
-
-        }
-
-        pre{
-
-          white-space:pre-wrap;
-
-          word-break:break-word;
-
-        }
-
-        blockquote{
-
-          border-left:
-            3px solid #ddd;
-
-          margin-left:0;
-
-          padding-left:12px;
-
-        }
-
-      </style>
-
-    </head>
-
-    <body>
-
-      ${sanitizeEmailHTMLContent(
-        html
-      )}
-
-    </body>
-
-    </html>
-
-  `;
+    body.innerHTML =
+        sanitizeEmailHTML(
+            html
+        );
 
 }
 
 
 /* =========================================================
    TEXT VIEW
-   ========================================================= */
+========================================================= */
 
 function renderTextView(){
 
-  const mail =
-    currentEmail;
+    const mail =
+        currentEmail;
 
 
-  const body =
-    document.getElementById(
-      "modalBody"
-    );
+    const body =
+        document.getElementById(
+            "modalBody"
+        );
 
 
-  const from =
-    mail.from ||
-    mail.sender ||
-    "-";
+    let text =
+        mail.body_text ||
+        mail.bodyText ||
+        mail.text ||
+        mail.textBody ||
+        "";
 
 
-  const to =
-    mail.to ||
-    mail.recipient ||
-    session?.email ||
-    "-";
+    if(!text){
+
+        const html =
+            mail.body_html ||
+            mail.bodyHtml ||
+            mail.html ||
+            "";
 
 
-  const date =
-    mail.received_at ||
-    mail.receivedAt ||
-    mail.created_at ||
-    mail.createdAt ||
-    "-";
-
-
-  let text =
-    mail.body_text ||
-    mail.bodyText ||
-    mail.text ||
-    mail.textBody ||
-    "";
-
-
-  /*
-    Kalau API tidak menyediakan
-    plain text, convert HTML ke text.
-  */
-
-  if(!text){
-
-    const html =
-      mail.body_html ||
-      mail.bodyHtml ||
-      mail.html ||
-      "";
-
-    text =
-      stripHTML(
-        html
-      );
-
-  }
-
-
-  if(!text){
-
-    text =
-      "No content";
-
-  }
-
-
-  body.innerHTML = `
-
-    <div class="email-info">
-
-      <div class="email-info-row">
-
-        <div class="email-info-label">
-          From
-        </div>
-
-        <div class="email-info-value">
-          ${escapeHTML(from)}
-        </div>
-
-      </div>
-
-
-      <div class="email-info-row">
-
-        <div class="email-info-label">
-          To
-        </div>
-
-        <div class="email-info-value">
-          ${escapeHTML(to)}
-        </div>
-
-      </div>
-
-
-      <div class="email-info-row">
-
-        <div class="email-info-label">
-          Date
-        </div>
-
-        <div class="email-info-value">
-          ${escapeHTML(
-            formatDate(date)
-          )}
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div class="text-view">
-
-      ${linkifyText(text)}
-
-    </div>
-
-  `;
-
-}
-
-
-/* =========================================================
-   TEXT URL → CLICKABLE LINK
-   ========================================================= */
-
-function linkifyText(text){
-
-  let safe =
-    escapeHTML(
-      String(text)
-    );
-
-
-  /*
-    Support:
-
-    https://example.com
-    http://example.com
-    www.example.com
-  */
-
-  const urlRegex =
-    /(\bhttps?:\/\/[^\s<]+|\bwww\.[^\s<]+)/gi;
-
-
-  safe =
-    safe.replace(
-      urlRegex,
-      function(match){
-
-        let url =
-          match;
-
-        let ending = "";
-
-
-        /*
-          Jangan ikutkan punctuation
-          di akhir URL.
-        */
-
-        while(
-          /[.,!?;:)\]}]$/.test(
-            url
-          )
-        ){
-
-          ending =
-            url.slice(-1) +
-            ending;
-
-          url =
-            url.slice(
-              0,
-              -1
+        text =
+            stripHTML(
+                html
             );
 
-        }
+    }
 
 
-        let href =
-          url;
+    if(!text){
+
+        text =
+            "No content";
+
+    }
 
 
-        if(
-          href
-            .toLowerCase()
-            .startsWith("www.")
-        ){
+    body.innerHTML = `
 
-          href =
-            "https://" +
-            href;
+        <div class="text-view">
 
-        }
+            ${linkifyText(text)}
 
+        </div>
 
-        return `
-
-          <a
-            href="${escapeAttribute(href)}"
-            target="_blank"
-            rel="noopener noreferrer"
-          >${escapeHTML(url)}</a>${ending}
-
-        `;
-
-      }
-    );
-
-
-  return safe;
+    `;
 
 }
 
 
 /* =========================================================
-   HTML EMAIL SANITIZER
-   ========================================================= */
+   LINKIFY TEXT
+========================================================= */
 
-function sanitizeEmailHTMLContent(
-  html
+function linkifyText(
+    text
 ){
 
-  /*
-    Kita parse HTML menggunakan DOMParser.
-
-    Script:
-      <script>
-
-    dibuang.
-
-    Event handler:
-      onclick=
-      onload=
-      onerror=
-
-    dibuang.
-
-    iframe/object/embed/form
-    dibuang agar email lebih aman.
-
-    Link HTTP/HTTPS tetap dipertahankan.
-  */
+    let safe =
+        escapeHTML(
+            String(text)
+        );
 
 
-  const parser =
-    new DOMParser();
+    /*
+        Deteksi:
+
+        https://example.com
+        http://example.com
+        www.example.com
+    */
+
+    const urlRegex =
+        /((?:https?:\/\/|www\.)[^\s<]+)/gi;
 
 
-  const doc =
-    parser.parseFromString(
-      String(html),
-      "text/html"
+    safe =
+        safe.replace(
+            urlRegex,
+            function(match){
+
+                let url =
+                    match;
+
+
+                let punctuation =
+                    "";
+
+
+                /*
+                    Pisahkan tanda baca akhir.
+                */
+
+                while(
+                    /[.,!?;:)\]}>"']$/
+                        .test(url)
+                ){
+
+                    punctuation =
+                        url.slice(-1) +
+                        punctuation;
+
+
+                    url =
+                        url.slice(
+                            0,
+                            -1
+                        );
+
+                }
+
+
+                let href =
+                    url;
+
+
+                if(
+                    /^www\./i.test(
+                        href
+                    )
+                ){
+
+                    href =
+                        "https://" +
+                        href;
+
+                }
+
+
+                return `
+
+                    <span class="gmail-link-wrapper">
+
+                        <a
+                            class="gmail-link"
+                            href="${escapeAttribute(href)}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >${escapeHTML(url)}</a>
+
+                        <button
+                            class="url-copy"
+                            type="button"
+                            title="Salin URL"
+                            onclick="copyURL(event, '${escapeAttribute(href)}')"
+                        >
+                            ⧉
+                        </button>
+
+                    </span>${punctuation}
+
+                `;
+
+            }
+        );
+
+
+    /*
+        Line break tetap dipertahankan.
+    */
+
+    return safe.replace(
+        /\n/g,
+        "<br>"
     );
 
-
-  /*
-    Hapus tag berbahaya.
-  */
-
-  doc
-    .querySelectorAll(
-      "script,iframe,object,embed,form,base,meta,link"
-    )
-    .forEach(
-      element =>
-        element.remove()
-    );
+}
 
 
-  /*
-    Hapus event handler.
-  */
+/* =========================================================
+   SANITIZE HTML
+========================================================= */
 
-  doc
-    .querySelectorAll("*")
-    .forEach(
-      element => {
+function sanitizeEmailHTML(
+    html
+){
 
-        [...element.attributes]
-          .forEach(
-            attribute => {
-
-              const name =
-                attribute.name
-                  .toLowerCase();
+    const parser =
+        new DOMParser();
 
 
-              if(
-                name.startsWith(
-                  "on"
-                )
-              ){
+    const doc =
+        parser.parseFromString(
+            String(html),
+            "text/html"
+        );
 
-                element.removeAttribute(
-                  attribute.name
+
+    /*
+        Hapus elemen yang tidak diperlukan.
+    */
+
+    doc
+        .querySelectorAll(
+            "script,iframe,object,embed,form,base,meta,link"
+        )
+        .forEach(
+            element =>
+                element.remove()
+        );
+
+
+    /*
+        Bersihkan attributes.
+    */
+
+    doc
+        .querySelectorAll("*")
+        .forEach(
+            element => {
+
+                [
+                    ...element.attributes
+                ].forEach(
+                    attribute => {
+
+                        const name =
+                            attribute.name
+                                .toLowerCase();
+
+
+                        /*
+                            Hapus:
+
+                            onclick
+                            onload
+                            onerror
+                            dll.
+                        */
+
+                        if(
+                            name.startsWith(
+                                "on"
+                            )
+                        ){
+
+                            element.removeAttribute(
+                                attribute.name
+                            );
+
+                        }
+
+                    }
                 );
 
-              }
+
+                /*
+                    Bersihkan URL pada A.
+                */
+
+                if(
+                    element.tagName
+                        .toLowerCase()
+                    ===
+                    "a"
+                ){
+
+                    const href =
+                        element.getAttribute(
+                            "href"
+                        );
+
+
+                    if(href){
+
+                        const clean =
+                            href.trim();
+
+
+                        if(
+                            /^https?:\/\//i
+                                .test(
+                                    clean
+                                )
+                        ){
+
+                            element.setAttribute(
+                                "target",
+                                "_blank"
+                            );
+
+
+                            element.setAttribute(
+                                "rel",
+                                "noopener noreferrer"
+                            );
+
+                        }else{
+
+                            element.removeAttribute(
+                                "href"
+                            );
+
+                        }
+
+                    }
+
+                }
+
+
+                /*
+                    Image hanya http/https
+                    atau data:image.
+                */
+
+                if(
+                    element.tagName
+                        .toLowerCase()
+                    ===
+                    "img"
+                ){
+
+                    const src =
+                        element.getAttribute(
+                            "src"
+                        );
+
+
+                    if(src){
+
+                        if(
+                            !/^https?:\/\//i
+                                .test(src)
+                            &&
+                            !/^data:image\//i
+                                .test(src)
+                        ){
+
+                            element.removeAttribute(
+                                "src"
+                            );
+
+                        }
+
+                    }
+
+                }
 
             }
-          );
+        );
 
 
-        /*
-          Link hanya boleh HTTP/HTTPS.
-        */
+    /*
+        Tambahkan style agar email
+        terlihat natural seperti Gmail.
+    */
 
-        if(
-          element.tagName
-            .toLowerCase() === "a"
-        ){
-
-          const href =
-            element.getAttribute(
-              "href"
-            );
+    const style =
+        doc.createElement(
+            "style"
+        );
 
 
-          if(href){
+    style.textContent = `
 
-            const clean =
-              href.trim();
+        body{
+            margin:0 !important;
 
+            padding:0 !important;
 
-            if(
-              /^https?:\/\//i.test(
-                clean
-              )
-            ){
+            color:#202124 !important;
 
-              element.setAttribute(
-                "target",
-                "_blank"
-              );
+            background:#fff !important;
 
-              element.setAttribute(
-                "rel",
-                "noopener noreferrer"
-              );
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif !important;
 
-            }else{
+            font-size:14px !important;
 
-              /*
-                Hapus javascript:
-                mailto:
-                data:
-                dan scheme lain
-                dari HTML View.
-              */
+            line-height:1.65 !important;
 
-              element.removeAttribute(
-                "href"
-              );
+            word-break:break-word !important;
 
-            }
-
-          }
-
+            overflow-wrap:anywhere !important;
         }
 
+        img{
+            max-width:100% !important;
 
-        /*
-          Bersihkan src gambar.
-        */
-
-        if(
-          element.tagName
-            .toLowerCase() === "img"
-        ){
-
-          const src =
-            element.getAttribute(
-              "src"
-            );
-
-
-          if(src){
-
-            if(
-              !/^https?:\/\//i.test(
-                src
-              ) &&
-              !/^data:image\//i.test(
-                src
-              )
-            ){
-
-              element.removeAttribute(
-                "src"
-              );
-
-            }
-
-          }
-
+            height:auto !important;
         }
 
-      }
+        table{
+            max-width:100% !important;
+        }
+
+        pre{
+            white-space:pre-wrap !important;
+
+            word-break:break-word !important;
+
+            max-width:100% !important;
+        }
+
+        a{
+            color:#1a73e8 !important;
+
+            text-decoration:none !important;
+
+            word-break:break-all !important;
+        }
+
+        a:hover{
+            text-decoration:underline !important;
+        }
+
+    `;
+
+
+    doc.head.appendChild(
+        style
     );
 
 
-  return doc.body.innerHTML;
-
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-   ========================================================= */
-
-function escapeHTML(value){
-
-  return String(
-    value ?? ""
-  )
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-/* =========================================================
-   ESCAPE ATTRIBUTE
-   ========================================================= */
-
-function escapeAttribute(
-  value
-){
-
-  return escapeHTML(
-    value
-  );
+    return doc.body.innerHTML;
 
 }
 
 
 /* =========================================================
    STRIP HTML
-   ========================================================= */
+========================================================= */
 
 function stripHTML(
-  html
+    html
 ){
 
-  if(!html){
-    return "";
-  }
+    if(!html){
+        return "";
+    }
 
 
-  const div =
-    document.createElement(
-      "div"
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.innerHTML =
+        html;
+
+
+    return (
+        div.textContent ||
+        div.innerText ||
+        ""
     );
-
-
-  div.innerHTML =
-    html;
-
-
-  return (
-    div.textContent ||
-    div.innerText ||
-    ""
-  );
 
 }
 
 
 /* =========================================================
-   FORMAT DATE
-   ========================================================= */
+   ESCAPE HTML
+========================================================= */
 
-function formatDate(
-  value
+function escapeHTML(
+    value
 ){
 
-  if(!value){
-    return "-";
-  }
-
-
-  const date =
-    new Date(value);
-
-
-  if(
-    Number.isNaN(
-      date.getTime()
-    )
-  ){
-
     return String(
-      value
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   ESCAPE ATTRIBUTE
+========================================================= */
+
+function escapeAttribute(
+    value
+){
+
+    return escapeHTML(
+        value
     );
 
-  }
+}
 
 
-  return date.toLocaleString(
-    "id-ID",
-    {
-      dateStyle:"medium",
-      timeStyle:"short"
+/* =========================================================
+   DATE
+========================================================= */
+
+function formatDate(
+    value
+){
+
+    if(!value){
+        return "-";
     }
-  );
+
+
+    const date =
+        new Date(
+            value
+        );
+
+
+    if(
+        Number.isNaN(
+            date.getTime()
+        )
+    ){
+
+        return String(
+            value
+        );
+
+    }
+
+
+    return date.toLocaleString(
+        "id-ID",
+        {
+            dateStyle:"medium",
+            timeStyle:"short"
+        }
+    );
 
 }
 
 
 /* =========================================================
    MODAL CLOSE
-   ========================================================= */
+========================================================= */
 
 function closeModal(){
 
-  document
-    .getElementById(
-      "emailModal"
-    )
-    .classList.remove(
-      "show"
-    );
+    document
+        .getElementById(
+            "emailModal"
+        )
+        .classList.remove(
+            "show"
+        );
 
-  currentEmail = null;
+
+    currentEmail =
+        null;
 
 }
 
 
 document
-  .getElementById(
-    "emailModal"
-  )
-  .addEventListener(
-    "click",
-    function(event){
+    .getElementById(
+        "emailModal"
+    )
+    .addEventListener(
+        "click",
+        function(event){
 
-      if(
-        event.target === this
-      ){
+            if(
+                event.target === this
+            ){
 
-        closeModal();
+                closeModal();
 
-      }
+            }
 
-    }
-  );
+        }
+    );
 
 
 document.addEventListener(
-  "keydown",
-  function(event){
+    "keydown",
+    function(event){
 
-    if(
-      event.key === "Escape"
-    ){
+        if(
+            event.key === "Escape"
+        ){
 
-      closeModal();
+            closeModal();
+
+        }
 
     }
-
-  }
 );
 
 
 /* =========================================================
-   COUNTDOWN
-   ========================================================= */
+   TIMER
+========================================================= */
 
 function startTimers(){
 
-  stopTimers();
+    stopTimers();
 
 
-  updateCountdown();
+    updateCountdown();
 
 
-  countdownTimer =
-    setInterval(
-      updateCountdown,
-      1000
-    );
+    countdownTimer =
+        setInterval(
+            updateCountdown,
+            1000
+        );
 
 
-  /*
-    Auto refresh setiap 5 detik.
-  */
+    /*
+        Inbox otomatis refresh
+        setiap 5 detik.
+    */
 
-  refreshTimer =
-    setInterval(
-      function(){
+    refreshTimer =
+        setInterval(
+            function(){
 
-        if(session){
+                if(session){
 
-          refreshInboxSilent();
+                    refreshInboxSilent();
 
-        }
+                }
 
-      },
-      5000
-    );
+            },
+            5000
+        );
 
 }
 
 
 function stopTimers(){
 
-  if(
-    countdownTimer
-  ){
+    if(
+        countdownTimer
+    ){
 
-    clearInterval(
-      countdownTimer
-    );
+        clearInterval(
+            countdownTimer
+        );
 
-    countdownTimer =
-      null;
+        countdownTimer =
+            null;
 
-  }
+    }
 
 
-  if(
-    refreshTimer
-  ){
+    if(
+        refreshTimer
+    ){
 
-    clearInterval(
-      refreshTimer
-    );
+        clearInterval(
+            refreshTimer
+        );
 
-    refreshTimer =
-      null;
+        refreshTimer =
+            null;
 
-  }
+    }
 
 }
 
 
 /* =========================================================
-   COUNTDOWN UPDATE
-   ========================================================= */
+   COUNTDOWN
+========================================================= */
 
 function updateCountdown(){
 
-  if(
-    !session ||
-    !session.expiresAt
-  ){
+    if(
+        !session ||
+        !session.expiresAt
+    ){
+
+        document.getElementById(
+            "countdown"
+        ).textContent =
+            "--:--";
+
+        return;
+
+    }
+
+
+    const expiry =
+        new Date(
+            session.expiresAt
+        ).getTime();
+
+
+    const remaining =
+        Math.max(
+            0,
+            expiry -
+            Date.now()
+        );
+
+
+    if(
+        remaining <= 0
+    ){
+
+        document.getElementById(
+            "countdown"
+        ).textContent =
+            "Expired";
+
+
+        document.getElementById(
+            "mailStatus"
+        ).textContent =
+            "Expired";
+
+
+        stopTimers();
+
+
+        refreshInbox();
+
+
+        return;
+
+    }
+
+
+    const totalSeconds =
+        Math.floor(
+            remaining / 1000
+        );
+
+
+    const minutes =
+        Math.floor(
+            totalSeconds / 60
+        );
+
+
+    const seconds =
+        totalSeconds % 60;
+
 
     document.getElementById(
-      "countdown"
+        "countdown"
     ).textContent =
-      "--:--";
-
-    return;
-
-  }
-
-
-  const expiry =
-    new Date(
-      session.expiresAt
-    ).getTime();
-
-
-  const remaining =
-    Math.max(
-      0,
-      expiry - Date.now()
-    );
-
-
-  if(
-    remaining <= 0
-  ){
-
-    document.getElementById(
-      "countdown"
-    ).textContent =
-      "Expired";
-
-
-    document.getElementById(
-      "mailStatus"
-    ).textContent =
-      "Expired";
-
-
-    stopTimers();
-
-
-    refreshInbox();
-
-
-    return;
-
-  }
-
-
-  const totalSeconds =
-    Math.floor(
-      remaining / 1000
-    );
-
-
-  const minutes =
-    Math.floor(
-      totalSeconds / 60
-    );
-
-
-  const seconds =
-    totalSeconds % 60;
-
-
-  document.getElementById(
-    "countdown"
-  ).textContent =
-    `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
+        `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
 
 }
 
 
 /* =========================================================
    TOAST
-   ========================================================= */
+========================================================= */
 
 function showToast(
-  message
+    message
 ){
 
-  const toast =
-    document.getElementById(
-      "toast"
-    );
-
-
-  toast.textContent =
-    message;
-
-
-  toast.classList.add(
-    "show"
-  );
-
-
-  clearTimeout(
-    toastTimer
-  );
-
-
-  toastTimer =
-    setTimeout(
-      function(){
-
-        toast.classList.remove(
-          "show"
+    const toast =
+        document.getElementById(
+            "toast"
         );
 
-      },
-      2500
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
     );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            function(){
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            2300
+        );
 
 }
 
 
 /* =========================================================
-   INITIALIZE
-   ========================================================= */
+   INIT
+========================================================= */
 
 async function init(){
 
-  loadSession();
+    loadSession();
 
-  renderSession();
+    renderSession();
 
-  renderMessages();
+    renderMessages();
 
 
-  /*
-    Restore mailbox setelah reload.
-  */
+    /*
+        Kalau session masih tersimpan,
+        restore inbox setelah reload.
+    */
 
-  if(
-    session &&
-    session.email
-  ){
+    if(
+        session &&
+        session.email
+    ){
 
-    await refreshInbox();
+        await refreshInbox();
 
-    startTimers();
+        startTimers();
 
-  }
+    }
 
 }
 
