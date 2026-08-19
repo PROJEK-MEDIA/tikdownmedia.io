@@ -12,68 +12,55 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'Inter', sans-serif;
             background: #f0f2f5;
             color: #1a1a2e;
-            min-height: 100vh;
             padding: 20px;
         }
-
         .container {
             max-width: 780px;
             margin: 0 auto;
         }
-
         .header {
             text-align: center;
             padding: 30px 0 20px;
         }
-
         .header .logo {
             font-size: 28px;
             font-weight: 700;
             color: #1a1a2e;
-            letter-spacing: -0.5px;
         }
-
         .header .logo span {
             color: #4f46e5;
         }
-
         .header .logo i {
             color: #4f46e5;
             margin-right: 6px;
         }
-
         .header .sub {
             color: #6b7280;
             font-size: 14px;
-            margin-top: 4px;
         }
-
         .card {
-            background: #ffffff;
+            background: #fff;
             border-radius: 16px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
             padding: 28px 32px;
             margin-bottom: 20px;
             border: 1px solid #e5e7eb;
         }
-
         .card-title {
             font-size: 13px;
             font-weight: 600;
             color: #6b7280;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: .5px;
             margin-bottom: 16px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-
         .email-box {
             display: flex;
             align-items: center;
@@ -82,19 +69,7 @@
             border: 2px solid #e5e7eb;
             border-radius: 12px;
             padding: 14px 18px;
-            transition: 0.2s;
         }
-
-        .email-box:focus-within {
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        }
-
-        .email-box .icon {
-            color: #9ca3af;
-            font-size: 18px;
-        }
-
         .email-box .addr {
             flex: 1;
             font-size: 15px;
@@ -104,19 +79,15 @@
             background: transparent;
             border: none;
             outline: none;
-            font-family: inherit;
         }
-
         .email-box .addr::placeholder {
             color: #9ca3af;
             font-weight: 400;
         }
-
         .email-box .actions {
             display: flex;
             gap: 6px;
         }
-
         .email-box .actions button {
             width: 36px;
             height: 36px;
@@ -125,30 +96,19 @@
             border-radius: 8px;
             color: #6b7280;
             cursor: pointer;
-            transition: 0.2s;
+            transition: .2s;
             font-size: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
-
         .email-box .actions button:hover {
             background: #e5e7eb;
             color: #1a1a2e;
         }
-
-        .email-box .actions button.copy-btn:hover {
-            background: #4f46e5;
-            color: #fff;
-        }
-
         .btn-row {
             display: flex;
             gap: 10px;
             margin-top: 14px;
             flex-wrap: wrap;
         }
-
         .btn {
             padding: 10px 22px;
             border-radius: 10px;
@@ -156,64 +116,49 @@
             font-weight: 600;
             border: none;
             cursor: pointer;
-            transition: 0.2s;
+            transition: .2s;
             display: flex;
             align-items: center;
             gap: 8px;
-            font-family: inherit;
         }
-
         .btn-primary {
             background: #4f46e5;
             color: #fff;
         }
-
         .btn-primary:hover {
             background: #4338ca;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
         }
-
         .btn-primary:disabled {
-            opacity: 0.5;
+            opacity: .5;
             cursor: not-allowed;
-            transform: none;
         }
-
         .btn-outline {
             background: transparent;
             color: #6b7280;
             border: 1.5px solid #e5e7eb;
         }
-
         .btn-outline:hover {
             background: #f8fafc;
-            border-color: #d1d5db;
         }
-
         .btn-outline:disabled {
-            opacity: 0.4;
+            opacity: .4;
             cursor: not-allowed;
         }
-
         .inbox-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 16px;
         }
-
         .inbox-header .left {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-
         .inbox-header .left h2 {
             font-size: 18px;
             font-weight: 600;
         }
-
         .inbox-header .count {
             background: #e5e7eb;
             padding: 2px 12px;
@@ -222,36 +167,30 @@
             font-weight: 600;
             color: #4b5563;
         }
-
         .inbox-header .meta {
             font-size: 12px;
             color: #9ca3af;
         }
-
         .msg-list {
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
-
         .msg-item {
             background: #fff;
             border: 1px solid #e5e7eb;
             border-radius: 10px;
             padding: 14px 18px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: .2s;
             display: flex;
             gap: 14px;
             align-items: flex-start;
         }
-
         .msg-item:hover {
             border-color: #4f46e5;
-            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.06);
             transform: translateX(2px);
         }
-
         .msg-item .avatar {
             width: 38px;
             height: 38px;
@@ -265,19 +204,16 @@
             font-size: 14px;
             flex-shrink: 0;
         }
-
         .msg-item .body {
             flex: 1;
             min-width: 0;
         }
-
         .msg-item .top {
             display: flex;
             justify-content: space-between;
             gap: 10px;
             margin-bottom: 2px;
         }
-
         .msg-item .from {
             font-weight: 600;
             font-size: 14px;
@@ -285,13 +221,11 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
         .msg-item .time {
             font-size: 12px;
             color: #9ca3af;
             flex-shrink: 0;
         }
-
         .msg-item .subj {
             font-size: 13px;
             font-weight: 500;
@@ -300,7 +234,6 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
         .msg-item .preview {
             font-size: 13px;
             color: #6b7280;
@@ -310,7 +243,6 @@
             overflow: hidden;
             line-height: 1.5;
         }
-
         .msg-item .otp-badge {
             display: inline-flex;
             align-items: center;
@@ -323,7 +255,6 @@
             font-weight: 600;
             color: #4f46e5;
         }
-
         .empty {
             text-align: center;
             padding: 50px 20px;
@@ -331,30 +262,27 @@
             border-radius: 12px;
             border: 2px dashed #e5e7eb;
         }
-
         .empty .icon {
             font-size: 40px;
             color: #d1d5db;
             margin-bottom: 12px;
         }
-
         .empty h3 {
             font-size: 16px;
             font-weight: 600;
             color: #6b7280;
         }
-
         .empty p {
             font-size: 14px;
             color: #9ca3af;
             margin-top: 4px;
         }
 
-        /* MODAL - HTML VIEW */
+        /* MODAL - PAKE WEBVIEW */
         .modal {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, .5);
             backdrop-filter: blur(4px);
             z-index: 1000;
             display: flex;
@@ -363,14 +291,12 @@
             padding: 20px;
             opacity: 0;
             visibility: hidden;
-            transition: 0.25s;
+            transition: .25s;
         }
-
         .modal.open {
             opacity: 1;
             visibility: visible;
         }
-
         .modal-box {
             background: #fff;
             border-radius: 16px;
@@ -379,23 +305,21 @@
             max-height: 85vh;
             display: flex;
             flex-direction: column;
-            transform: scale(0.96);
-            transition: 0.25s;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            transform: scale(.96);
+            transition: .25s;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .2);
         }
-
         .modal.open .modal-box {
             transform: scale(1);
         }
-
         .modal-head {
             padding: 18px 24px;
             border-bottom: 1px solid #e5e7eb;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-shrink: 0;
         }
-
         .modal-head h3 {
             font-size: 15px;
             font-weight: 600;
@@ -403,7 +327,6 @@
             align-items: center;
             gap: 8px;
         }
-
         .modal-close {
             width: 32px;
             height: 32px;
@@ -413,34 +336,37 @@
             color: #6b7280;
             cursor: pointer;
             font-size: 16px;
-            transition: 0.2s;
         }
-
         .modal-close:hover {
             background: #e5e7eb;
         }
 
+        /* WEBVIEW UNTUK KONTEN EMAIL */
         .modal-body {
-            padding: 24px;
-            overflow-y: auto;
             flex: 1;
+            overflow: hidden;
+            padding: 0;
+            position: relative;
+        }
+        .modal-body iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
         }
 
         .detail-subj {
             font-size: 18px;
             font-weight: 600;
-            margin-bottom: 12px;
+            padding: 20px 24px 0;
         }
-
         .detail-meta {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-bottom: 16px;
-            padding-bottom: 16px;
+            padding: 12px 24px 16px;
             border-bottom: 1px solid #e5e7eb;
         }
-
         .detail-meta span {
             font-size: 12px;
             color: #6b7280;
@@ -451,38 +377,33 @@
             align-items: center;
             gap: 6px;
         }
-
         .detail-meta span i {
             color: #4f46e5;
         }
-
         .otp-box {
             background: #eef2ff;
             border-radius: 10px;
             padding: 14px 20px;
-            margin-bottom: 16px;
+            margin: 0 24px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 10px;
         }
-
         .otp-box .lbl {
             font-size: 11px;
             font-weight: 600;
             color: #4f46e5;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: .5px;
         }
-
         .otp-box .code {
             font-size: 28px;
             font-weight: 700;
             color: #1a1a2e;
             letter-spacing: 4px;
         }
-
         .otp-box .copy-otp {
             padding: 6px 16px;
             background: #4f46e5;
@@ -492,94 +413,9 @@
             font-weight: 600;
             font-size: 12px;
             cursor: pointer;
-            transition: 0.2s;
         }
-
         .otp-box .copy-otp:hover {
             background: #4338ca;
-        }
-
-        /* EMAIL CONTENT - HTML VIEW DENGAN LINK KLIKABLE */
-        .email-content {
-            font-size: 14px;
-            line-height: 1.8;
-            color: #1a1a2e;
-        }
-
-        .email-content p {
-            margin-bottom: 10px;
-        }
-
-        .email-content a {
-            color: #4f46e5;
-            text-decoration: underline;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .email-content a:hover {
-            color: #4338ca;
-        }
-
-        .email-content .link-wrap {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 10px 0;
-            padding: 10px 16px;
-            background: #f8fafc;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            flex-wrap: wrap;
-            transition: 0.2s;
-        }
-
-        .email-content .link-wrap:hover {
-            border-color: #4f46e5;
-            background: #f0f2ff;
-        }
-
-        .email-content .link-wrap .link-text {
-            flex: 1;
-            min-width: 60px;
-            word-break: break-all;
-            font-size: 13px;
-        }
-
-        .email-content .link-wrap .link-text a {
-            color: #4f46e5;
-            text-decoration: underline;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .email-content .link-wrap .link-text a:hover {
-            color: #4338ca;
-        }
-
-        .email-content .link-wrap .actions {
-            display: flex;
-            gap: 6px;
-            flex-shrink: 0;
-        }
-
-        .email-content .link-wrap .actions button {
-            padding: 4px 12px;
-            border: 1px solid #e5e7eb;
-            background: #fff;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.2s;
-            color: #6b7280;
-            font-family: inherit;
-        }
-
-        .email-content .link-wrap .actions button:hover {
-            background: #4f46e5;
-            color: #fff;
-            border-color: #4f46e5;
         }
 
         .toast-stack {
@@ -591,7 +427,6 @@
             flex-direction: column;
             gap: 6px;
         }
-
         .toast {
             padding: 10px 18px;
             background: #1a1a2e;
@@ -599,13 +434,12 @@
             border-radius: 10px;
             font-size: 13px;
             font-weight: 500;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-            animation: slideUp 0.3s ease;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, .15);
+            animation: slideUp .3s ease;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-
         @keyframes slideUp {
             from {
                 opacity: 0;
@@ -616,7 +450,6 @@
                 transform: translateY(0);
             }
         }
-
         .toast.ok {
             background: #065f46;
         }
@@ -626,24 +459,22 @@
         .toast.inf {
             background: #1e40af;
         }
-
         .spinner {
             display: inline-block;
             width: 16px;
             height: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, .2);
             border-top-color: #fff;
             border-radius: 50%;
-            animation: spin 0.7s linear infinite;
+            animation: spin .7s linear infinite;
         }
-
         @keyframes spin {
             to {
                 transform: rotate(360deg);
             }
         }
 
-        @media (max-width: 600px) {
+        @media(max-width:600px) {
             body {
                 padding: 12px;
             }
@@ -676,22 +507,23 @@
                 max-width: 100%;
                 margin: 10px;
             }
-            .modal-body {
-                padding: 16px;
-            }
             .otp-box .code {
                 font-size: 22px;
                 letter-spacing: 3px;
             }
-            .email-content .link-wrap {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .email-content .link-wrap .actions {
-                justify-content: center;
-            }
             .inbox-header .meta {
                 display: none;
+            }
+            .detail-subj {
+                padding: 16px 16px 0;
+                font-size: 16px;
+            }
+            .detail-meta {
+                padding: 10px 16px 12px;
+            }
+            .otp-box {
+                margin: 0 16px 12px;
+                padding: 12px 16px;
             }
         }
     </style>
@@ -699,96 +531,68 @@
 <body>
 
     <div class="container">
-
         <div class="header">
-            <div class="logo">
-                <i class="fas fa-envelope"></i> Temp<span>Mail</span>
-            </div>
+            <div class="logo"><i class="fas fa-envelope"></i> Temp<span>Mail</span></div>
             <div class="sub">Disposable Temporary Email</div>
         </div>
 
         <div class="card">
-            <div class="card-title">
-                <i class="fas fa-at"></i> Your Temporary Email Address
-            </div>
-
+            <div class="card-title"><i class="fas fa-at"></i> Your Temporary Email Address</div>
             <div class="email-box">
                 <span class="icon"><i class="fas fa-envelope"></i></span>
                 <input class="addr" id="emailDisplay" placeholder="Generate new address" readonly>
                 <div class="actions">
-                    <button onclick="copyEmail()" id="copyBtn" disabled title="Copy email">
-                        <i class="fas fa-copy"></i>
-                    </button>
-                    <button onclick="refreshInbox()" id="refBtn" disabled title="Refresh inbox">
-                        <i class="fas fa-sync" id="refIcon"></i>
-                    </button>
-                    <button onclick="deleteAccount()" id="delBtn" disabled title="Delete mailbox" style="color:#dc2626;">
-                        <i class="fas fa-trash"></i>
-                    </button>
+                    <button onclick="copyEmail()" id="copyBtn" disabled><i class="fas fa-copy"></i></button>
+                    <button onclick="refreshInbox()" id="refBtn" disabled><i class="fas fa-sync" id="refIcon"></i></button>
+                    <button onclick="deleteAccount()" id="delBtn" disabled style="color:#dc2626;"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
-
             <div class="btn-row">
-                <button class="btn btn-primary" id="genBtn" onclick="generateEmail()">
-                    <i class="fas fa-plus"></i> Generate
-                </button>
-                <button class="btn btn-outline" onclick="refreshInbox()" id="refBtn2" disabled>
-                    <i class="fas fa-sync"></i> Refresh
-                </button>
+                <button class="btn btn-primary" id="genBtn" onclick="generateEmail()"><i class="fas fa-plus"></i> Generate</button>
+                <button class="btn btn-outline" onclick="refreshInbox()" id="refBtn2" disabled><i class="fas fa-sync"></i> Refresh</button>
             </div>
         </div>
 
-        <div class="card" style="padding: 20px 24px;">
+        <div class="card" style="padding:20px 24px;">
             <div class="inbox-header">
-                <div class="left">
-                    <h2>Inbox</h2>
-                    <span class="count" id="msgCount">0</span>
-                </div>
+                <div class="left"><h2>Inbox</h2><span class="count" id="msgCount">0</span></div>
                 <span class="meta" id="lastRef">Waiting...</span>
             </div>
-
             <div class="msg-list" id="msgList">
-                <div class="empty">
-                    <div class="icon"><i class="fas fa-inbox"></i></div>
-                    <h3>Your inbox is empty</h3>
-                    <p>Waiting for incoming emails</p>
-                </div>
+                <div class="empty"><div class="icon"><i class="fas fa-inbox"></i></div><h3>Your inbox is empty</h3><p>Waiting for incoming emails</p></div>
             </div>
-        </div>
-
-        <div style="text-align:center;padding:20px 0 10px;font-size:12px;color:#9ca3af;">
-            <p>Forget about spam. Keep your real mailbox clean and secure.</p>
         </div>
     </div>
 
-    <!-- MODAL -->
+    <!-- MODAL DENGAN IFRAME WEBVIEW -->
     <div class="modal" id="modalBg">
         <div class="modal-box">
             <div class="modal-head">
                 <h3><i class="fas fa-envelope" style="color:#4f46e5;"></i> Message</h3>
                 <button class="modal-close" onclick="closeModal()"><i class="fas fa-xmark"></i></button>
             </div>
-            <div class="modal-body" id="modalBody"></div>
+            <div class="detail-subj" id="modalSubject">Loading...</div>
+            <div class="detail-meta" id="modalMeta"></div>
+            <div id="modalOtp"></div>
+            <div class="modal-body" id="modalBody">
+                <iframe id="emailFrame" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+            </div>
         </div>
     </div>
 
-    <!-- TOAST -->
     <div class="toast-stack" id="toastStack"></div>
 
     <script>
         const TEMPY_API = 'https://tempy.email/api/v1';
-
-        let account = null;
-        let messages = [];
-        let refreshTimer = null;
-        let isGenerating = false;
+        let account = null,
+            messages = [],
+            refreshTimer = null,
+            isGenerating = false;
 
         const API = {
             async request(url, options = {}) {
-                const res = await fetch(url, {
-                    ...options,
-                    headers: { 'Accept': 'application/json', ...(options.headers || {}) }
-                });
+                const res = await fetch(url, { ...options,
+                    headers: { 'Accept': 'application/json', ...(options.headers || {}) } });
                 let data = null;
                 const text = await res.text();
                 if (text) { try { data = JSON.parse(text); } catch { data = text; } }
@@ -816,13 +620,11 @@
                 try { await API.deleteMailbox(account.email); } catch (e) {}
                 clearSession(false);
             }
-
             const btn = document.getElementById('genBtn');
             const orig = btn.innerHTML;
             btn.disabled = true;
             isGenerating = true;
             btn.innerHTML = '<span class="spinner"></span> Creating...';
-
             try {
                 const result = await API.createMailbox();
                 if (!result?.email) throw new Error('API tidak mengembalikan email');
@@ -913,17 +715,14 @@
                 const otp = extractOTP(subj + ' ' + body);
                 const time = formatDate(getDate(msg));
                 return `<div class="msg-item" onclick="openMessage(${i})">
-              <div class="avatar">${esc(from.charAt(0) || '?').toUpperCase()}</div>
-              <div class="body">
-                <div class="top">
-                  <span class="from">${esc(from)}</span>
-                  <span class="time">${esc(time)}</span>
-                </div>
-                <div class="subj">${esc(subj)}</div>
-                <div class="preview">${esc(body.slice(0, 160))}</div>
-                ${otp ? `<div class="otp-badge"><i class="fas fa-shield-halved"></i> OTP: ${esc(otp)}</div>` : ''}
-              </div>
-            </div>`;
+                    <div class="avatar">${esc(from.charAt(0) || '?').toUpperCase()}</div>
+                    <div class="body">
+                        <div class="top"><span class="from">${esc(from)}</span><span class="time">${esc(time)}</span></div>
+                        <div class="subj">${esc(subj)}</div>
+                        <div class="preview">${esc(body.slice(0, 160))}</div>
+                        ${otp ? `<div class="otp-badge"><i class="fas fa-shield-halved"></i> OTP: ${esc(otp)}</div>` : ''}
+                    </div>
+                </div>`;
             }).join('');
         }
 
@@ -963,7 +762,7 @@
         }
 
         /* =========================================================
-           OPEN MESSAGE - RENDER HTML VIEW
+           OPEN MESSAGE - PAKE WEBVIEW (IFRAME)
            ========================================================= */
         function openMessage(index) {
             const msg = messages[index];
@@ -975,59 +774,174 @@
             const html = msg?.body_html || msg?.bodyHtml || msg?.html || null;
             const otp = extractOTP(subj + ' ' + body);
 
-            let htmlContent = '';
+            // Set subject & meta
+            document.getElementById('modalSubject').textContent = subj;
 
-            if (html) {
-                // KALO ADA HTML, RENDER LANGSUNG
-                let clean = stripDanger(html);
-                htmlContent = `<div class="email-content">${clean}</div>`;
+            document.getElementById('modalMeta').innerHTML = `
+                <span><i class="fas fa-user"></i> ${esc(from)}</span>
+                <span><i class="fas fa-clock"></i> ${esc(formatLongDate(getDate(msg)))}</span>
+                <span><i class="fas fa-tag"></i> ${esc(account.email)}</span>
+            `;
+
+            // Set OTP
+            if (otp) {
+                document.getElementById('modalOtp').innerHTML = `
+                    <div class="otp-box">
+                        <div>
+                            <div class="lbl">Detected OTP</div>
+                            <div class="code">${esc(otp)}</div>
+                        </div>
+                        <button class="copy-otp" onclick="copyOTP('${escJs(otp)}')"><i class="fas fa-copy"></i> Copy</button>
+                    </div>
+                `;
             } else {
-                // KALO PLAIN TEXT, UBAH KE HTML DENGAN LINK
-                let text = esc(body || 'No content');
-                // Ubah newline ke <br>
-                text = text.replace(/\n/g, '<br>');
-                // Ubah URL jadi link
-                text = text.replace(/(https?:\/\/[^\s<>"']+)/gi, function(url) {
-                    return `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(url)}</a>`;
-                });
-                htmlContent = `<div class="email-content">${text}</div>`;
+                document.getElementById('modalOtp').innerHTML = '';
             }
 
-            document.getElementById('modalBody').innerHTML = `
-            <div class="detail-subj">${esc(subj)}</div>
-            <div class="detail-meta">
-              <span><i class="fas fa-user"></i> ${esc(from)}</span>
-              <span><i class="fas fa-clock"></i> ${esc(formatLongDate(getDate(msg)))}</span>
-              <span><i class="fas fa-tag"></i> ${esc(account.email)}</span>
-            </div>
-            ${otp ? `<div class="otp-box"><div><div class="lbl">Detected OTP</div><div class="code">${esc(otp)}</div></div><button class="copy-otp" onclick="copyOTP('${escJs(otp)}')"><i class="fas fa-copy"></i> Copy</button></div>` : ''}
-            ${htmlContent}
-          `;
+            // BUILD HTML UNTUK IFRAME
+            let emailHtml = '';
+            
+            if (html) {
+                // Kalo ada HTML dari API, pake itu
+                emailHtml = stripDanger(html);
+            } else {
+                // Kalo plain text, ubah ke HTML
+                let text = body || 'No content';
+                // Escape dulu
+                let escaped = esc(text);
+                // Newline ke <br>
+                escaped = escaped.replace(/\n/g, '<br>');
+                // Detect URL bebas
+                escaped = escaped.replace(/(https?:\/\/[^\s<>"']+)/gi, function(url) {
+                    return `<a href="${url}" target="_blank" rel="noopener" style="color:#4f46e5;text-decoration:underline;">${url}</a>`;
+                });
+                // Detect teks + URL: "Sign in to Alight Creative https://..."
+                escaped = escaped.replace(/([^<]*?)(https?:\/\/[^\s<>"']+)/gi, function(match, textBefore, url) {
+                    if (match.includes('<a href')) return match;
+                    let label = textBefore.trim();
+                    label = label.replace(/[:\-–—]+$/, '').trim();
+                    if (!label || label.length < 2) {
+                        return `<a href="${url}" target="_blank" rel="noopener" style="color:#4f46e5;text-decoration:underline;">${url}</a>`;
+                    }
+                    return `<a href="${url}" target="_blank" rel="noopener" style="color:#4f46e5;text-decoration:underline;">${label}</a>`;
+                });
+                // Bersihin URL yang kelewat
+                escaped = escaped.replace(/(https?:\/\/[^\s<>"']+)/gi, function(url) {
+                    if (url.includes('<a href')) return url;
+                    return `<a href="${url}" target="_blank" rel="noopener" style="color:#4f46e5;text-decoration:underline;">${url}</a>`;
+                });
+                emailHtml = escaped;
+            }
 
+            // BUILD FULL HTML UNTUK IFRAME
+            const fullHtml = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <style>
+                        body {
+                            font-family: -apple-system, 'Inter', sans-serif;
+                            font-size: 14px;
+                            line-height: 1.8;
+                            color: #1a1a2e;
+                            padding: 20px 24px;
+                            margin: 0;
+                            background: #fff;
+                        }
+                        a {
+                            color: #4f46e5 !important;
+                            text-decoration: underline !important;
+                            font-weight: 500;
+                        }
+                        a:hover {
+                            color: #4338ca !important;
+                        }
+                        p { margin-bottom: 10px; }
+                        .link-wrap {
+                            display: flex;
+                            align-items: center;
+                            gap: 12px;
+                            margin: 10px 0;
+                            padding: 10px 16px;
+                            background: #f8fafc;
+                            border: 1px solid #e5e7eb;
+                            border-radius: 8px;
+                            flex-wrap: wrap;
+                        }
+                        .link-wrap:hover {
+                            border-color: #4f46e5;
+                            background: #f0f2ff;
+                        }
+                        .link-wrap .link-text { flex: 1; min-width: 60px; word-break: break-all; }
+                        .link-wrap .actions { display: flex; gap: 6px; }
+                        .link-wrap .actions button {
+                            padding: 4px 12px;
+                            border: 1px solid #e5e7eb;
+                            background: #fff;
+                            border-radius: 6px;
+                            font-size: 11px;
+                            cursor: pointer;
+                            color: #6b7280;
+                        }
+                        .link-wrap .actions button:hover {
+                            background: #4f46e5;
+                            color: #fff;
+                            border-color: #4f46e5;
+                        }
+                        .email-btn {
+                            display: inline-block;
+                            padding: 10px 24px;
+                            background: #4f46e5;
+                            color: #fff !important;
+                            text-decoration: none !important;
+                            border-radius: 8px;
+                            font-weight: 600;
+                            margin: 8px 0;
+                        }
+                        .email-btn:hover {
+                            background: #4338ca !important;
+                        }
+                        @media (max-width: 600px) {
+                            body { padding: 16px; }
+                            .link-wrap { flex-direction: column; align-items: stretch; }
+                            .link-wrap .actions { justify-content: center; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${emailHtml}
+                </body>
+                </html>
+            `;
+
+            // Render ke iframe
+            const iframe = document.getElementById('emailFrame');
+            const blob = new Blob([fullHtml], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            iframe.src = url;
+
+            // Buka modal
             document.getElementById('modalBg').classList.add('open');
+            
+            // Cleanup object URL setelah iframe load
+            iframe.onload = function() {
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+            };
         }
 
-        /* =========================================================
-           COPY FUNCTIONS
-           ========================================================= */
         async function copyEmail() {
             if (!account) return;
-            try {
-                await navigator.clipboard.writeText(account.email);
-                toast('✅ Email copied!', 'ok');
-            } catch (e) { toast('Copy failed', 'err'); }
+            try { await navigator.clipboard.writeText(account.email);
+                toast('✅ Email copied!', 'ok'); } catch (e) { toast('Copy failed', 'err'); }
         }
 
         async function copyOTP(otp) {
-            try {
-                await navigator.clipboard.writeText(otp);
-                toast('✅ OTP copied!', 'ok');
-            } catch (e) { toast('Copy failed', 'err'); }
+            try { await navigator.clipboard.writeText(otp);
+                toast('✅ OTP copied!', 'ok'); } catch (e) { toast('Copy failed', 'err'); }
         }
 
-        /* =========================================================
-           DELETE
-           ========================================================= */
         async function deleteAccount() {
             if (!account) return;
             if (!confirm('Hapus email ini? Semua data akan hilang.')) return;
@@ -1061,14 +975,18 @@
         }
         startAutoRefresh();
 
-        function closeModal() { document.getElementById('modalBg').classList.remove('open'); }
-        document.getElementById('modalBg').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+        function closeModal() {
+            document.getElementById('modalBg').classList.remove('open');
+            // Hentikan iframe
+            const iframe = document.getElementById('emailFrame');
+            iframe.src = 'about:blank';
+        }
+        document.getElementById('modalBg').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') closeModal();
-            if (e.ctrlKey && e.key === 'r') {
-                e.preventDefault();
-                if (account) refreshInbox();
-            }
+            if (e.ctrlKey && e.key === 'r') { e.preventDefault(); if (account) refreshInbox(); }
         });
 
         function esc(text) {
