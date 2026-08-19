@@ -1,746 +1,1253 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-  <title>Alight Motion Premium • DapjiSync</title>
-  <meta name="description" content="Aktivasi Alight Motion Premium via API DapjiSync.">
-  <meta name="author" content="DapjiSync">
-  <meta name="theme-color" content="#0f172a">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230f172a' rx='4'/><text x='16' y='22' text-anchor='middle' font-size='18' font-family='Arial' fill='%23fbbf24'>AM</text></svg>">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temp Mail</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      background: #f1f5f9;
-      font-family: 'Inter', -apple-system, system-ui, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      color: #0f172a;
-    }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #f0f2f5;
+            color: #1a1a2e;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-    .container {
-      max-width: 480px;
-      width: 100%;
-      background: #ffffff;
-      border-radius: 28px;
-      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.06);
-      padding: 32px 28px;
-      transition: 0.2s;
-    }
+        .container {
+            max-width: 780px;
+            margin: 0 auto;
+        }
 
-    .container:hover {
-      box-shadow: 0 24px 72px rgba(15, 23, 42, 0.08);
-    }
+        /* HEADER */
+        .header {
+            text-align: center;
+            padding: 30px 0 20px;
+        }
 
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 28px;
-    }
+        .header .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a2e;
+            letter-spacing: -0.5px;
+        }
 
-    .brand-icon {
-      width: 48px;
-      height: 48px;
-      background: linear-gradient(135deg, #0f172a, #1e293b);
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fbbf24;
-      font-size: 20px;
-      flex-shrink: 0;
-    }
+        .header .logo span {
+            color: #4f46e5;
+        }
 
-    .brand-text {
-      display: flex;
-      flex-direction: column;
-    }
+        .header .logo i {
+            color: #4f46e5;
+            margin-right: 6px;
+        }
 
-    .brand-title {
-      font-weight: 700;
-      font-size: 1.25rem;
-      letter-spacing: -0.3px;
-      color: #0f172a;
-    }
+        .header .sub {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 4px;
+        }
 
-    .brand-badge {
-      font-size: 0.65rem;
-      font-weight: 600;
-      color: #0d9488;
-      background: #e6f7f4;
-      padding: 2px 12px;
-      border-radius: 100px;
-      display: inline-block;
-      width: fit-content;
-      margin-top: 2px;
-    }
+        /* CARD */
+        .card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
+            padding: 28px 32px;
+            margin-bottom: 20px;
+            border: 1px solid #e5e7eb;
+        }
 
-    .steps {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 24px;
-      background: #f1f5f9;
-      border-radius: 40px;
-      padding: 5px;
-    }
+        .card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-    .step {
-      flex: 1;
-      text-align: center;
-      padding: 8px 4px;
-      border-radius: 30px;
-      font-weight: 600;
-      font-size: 0.7rem;
-      color: #94a3b8;
-      transition: 0.2s;
-    }
+        /* EMAIL BOX */
+        .email-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f8fafc;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 14px 18px;
+            transition: 0.2s;
+        }
 
-    .step.active {
-      background: #ffffff;
-      color: #0f172a;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    }
+        .email-box:focus-within {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
 
-    .step i {
-      margin-right: 5px;
-      font-size: 0.7rem;
-    }
+        .email-box .icon {
+            color: #9ca3af;
+            font-size: 18px;
+        }
 
-    .form-group {
-      margin-bottom: 18px;
-    }
+        .email-box .addr {
+            flex: 1;
+            font-size: 15px;
+            font-weight: 500;
+            color: #1a1a2e;
+            word-break: break-all;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-family: inherit;
+        }
 
-    label {
-      display: block;
-      font-weight: 600;
-      font-size: 0.8rem;
-      margin-bottom: 6px;
-      color: #1e293b;
-    }
+        .email-box .addr::placeholder {
+            color: #9ca3af;
+            font-weight: 400;
+        }
 
-    label i {
-      margin-right: 6px;
-      color: #64748b;
-    }
+        .email-box .actions {
+            display: flex;
+            gap: 6px;
+        }
 
-    input,
-    textarea {
-      width: 100%;
-      padding: 14px 16px;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 14px;
-      font-size: 0.95rem;
-      font-family: 'Inter', sans-serif;
-      background: #fafcff;
-      transition: 0.15s;
-      color: #0f172a;
-    }
+        .email-box .actions button {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            color: #6b7280;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    input:focus,
-    textarea:focus {
-      outline: none;
-      border-color: #0f172a;
-      box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.05);
-    }
+        .email-box .actions button:hover {
+            background: #e5e7eb;
+            color: #1a1a2e;
+        }
 
-    textarea {
-      min-height: 80px;
-      resize: vertical;
-    }
+        .email-box .actions button.copy-btn:hover {
+            background: #4f46e5;
+            color: #fff;
+        }
 
-    .helper {
-      font-size: 0.7rem;
-      color: #64748b;
-      margin-top: 6px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
+        /* BUTTON */
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
 
-    .btn {
-      width: 100%;
-      padding: 15px;
-      border: none;
-      border-radius: 40px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      font-family: 'Inter', sans-serif;
-      background: #0f172a;
-      color: #fff;
-      cursor: pointer;
-      transition: 0.15s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
+        .btn {
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
 
-    .btn:hover {
-      background: #1e293b;
-      transform: scale(0.98);
-    }
+        .btn-primary {
+            background: #4f46e5;
+            color: #fff;
+        }
 
-    .btn-success {
-      background: #0d9488;
-    }
+        .btn-primary:hover {
+            background: #4338ca;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
 
-    .btn-success:hover {
-      background: #0f766e;
-    }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
 
-    .btn-secondary {
-      background: #f1f5f9;
-      color: #1e293b;
-    }
+        .btn-outline {
+            background: transparent;
+            color: #6b7280;
+            border: 1.5px solid #e5e7eb;
+        }
 
-    .btn-secondary:hover {
-      background: #e2e8f0;
-    }
+        .btn-outline:hover {
+            background: #f8fafc;
+            border-color: #d1d5db;
+        }
 
-    .btn:disabled {
-      opacity: 0.5;
-      pointer-events: none;
-    }
+        .btn-outline:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
 
-    .alert {
-      background: #f8fafc;
-      border-radius: 16px;
-      padding: 14px 16px;
-      font-size: 0.85rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      color: #1e293b;
-      margin-bottom: 20px;
-      border: 1px solid #e2e8f0;
-    }
+        /* INBOX */
+        .inbox-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
 
-    .alert i {
-      color: #0f172a;
-      font-size: 1rem;
-      margin-top: 2px;
-    }
+        .inbox-header .left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-    .alert-warning {
-      background: #fffbeb;
-      border-color: #fde68a;
-    }
+        .inbox-header .left h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
 
-    .alert-warning i {
-      color: #d97706;
-    }
+        .inbox-header .count {
+            background: #e5e7eb;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #4b5563;
+        }
 
-    .alert-success {
-      background: #ecfdf5;
-      border-color: #6ee7b7;
-    }
+        .inbox-header .meta {
+            font-size: 12px;
+            color: #9ca3af;
+        }
 
-    .alert-success i {
-      color: #0d9488;
-    }
+        /* MESSAGE LIST */
+        .msg-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
 
-    .alert-info {
-      background: #eff6ff;
-      border-color: #93c5fd;
-    }
+        .msg-item {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 14px 18px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
 
-    .alert-info i {
-      color: #2563eb;
-    }
+        .msg-item:hover {
+            border-color: #4f46e5;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.06);
+            transform: translateX(2px);
+        }
 
-    .alert-danger {
-      background: #fef2f2;
-      border-color: #fca5a5;
-    }
+        .msg-item .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #eef2ff;
+            color: #4f46e5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
 
-    .alert-danger i {
-      color: #ef4444;
-    }
+        .msg-item .body {
+            flex: 1;
+            min-width: 0;
+        }
 
-    .loading-container {
-      display: none;
-      margin: 16px 0 8px;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
+        .msg-item .top {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 2px;
+        }
 
-    .loading-container.show {
-      display: flex;
-    }
+        .msg-item .from {
+            font-weight: 600;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-    .loading-wave {
-      display: flex;
-      gap: 4px;
-      align-items: center;
-      height: 20px;
-    }
+        .msg-item .time {
+            font-size: 12px;
+            color: #9ca3af;
+            flex-shrink: 0;
+        }
 
-    .wave-bar {
-      width: 4px;
-      height: 100%;
-      background: #0f172a;
-      border-radius: 2px;
-      animation: wave 1.2s ease-in-out infinite;
-    }
+        .msg-item .subj {
+            font-size: 13px;
+            font-weight: 500;
+            color: #4f46e5;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-    .wave-bar:nth-child(2) {
-      animation-delay: 0.1s;
-    }
-    .wave-bar:nth-child(3) {
-      animation-delay: 0.2s;
-    }
-    .wave-bar:nth-child(4) {
-      animation-delay: 0.3s;
-    }
-    .wave-bar:nth-child(5) {
-      animation-delay: 0.4s;
-    }
+        .msg-item .preview {
+            font-size: 13px;
+            color: #6b7280;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.5;
+        }
 
-    @keyframes wave {
-      0%,
-      100% {
-        height: 20%;
-      }
-      50% {
-        height: 100%;
-      }
-    }
+        .msg-item .otp-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 4px;
+            padding: 2px 10px;
+            background: #eef2ff;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #4f46e5;
+        }
 
-    .loading-text {
-      font-size: 0.7rem;
-      color: #64748b;
-      font-weight: 500;
-    }
+        /* EMPTY */
+        .empty {
+            text-align: center;
+            padding: 50px 20px;
+            background: #fafafa;
+            border-radius: 12px;
+            border: 2px dashed #e5e7eb;
+        }
 
-    .panel {
-      display: none;
-    }
+        .empty .icon {
+            font-size: 40px;
+            color: #d1d5db;
+            margin-bottom: 12px;
+        }
 
-    .panel.active {
-      display: block;
-    }
+        .empty h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #6b7280;
+        }
 
-    .row-btns {
-      display: flex;
-      gap: 10px;
-      margin-top: 12px;
-    }
+        .empty p {
+            font-size: 14px;
+            color: #9ca3af;
+            margin-top: 4px;
+        }
 
-    .row-btns .btn {
-      flex: 1;
-    }
+        /* MODAL */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.25s;
+        }
 
-    .footer {
-      margin-top: 24px;
-      text-align: center;
-      font-size: 0.7rem;
-      color: #94a3b8;
-      border-top: 1px solid #f1f5f9;
-      padding-top: 18px;
-    }
+        .modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
 
-    .footer a {
-      color: #0f172a;
-      text-decoration: none;
-      font-weight: 500;
-    }
+        .modal-box {
+            background: #fff;
+            border-radius: 16px;
+            max-width: 640px;
+            width: 100%;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            transform: scale(0.96);
+            transition: 0.25s;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
 
-    /* Version selector */
-    .version-selector {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
+        .modal.open .modal-box {
+            transform: scale(1);
+        }
 
-    .version-btn {
-      flex: 1;
-      min-width: 60px;
-      padding: 8px 12px;
-      border: 2px solid #e2e8f0;
-      border-radius: 10px;
-      background: transparent;
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
-      font-size: 0.7rem;
-      color: #94a3b8;
-      cursor: pointer;
-      transition: 0.15s;
-    }
+        .modal-head {
+            padding: 18px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .version-btn.active {
-      border-color: #0f172a;
-      color: #0f172a;
-      background: #f1f5f9;
-    }
+        .modal-head h3 {
+            font-size: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-    .version-btn:hover {
-      border-color: #0f172a;
-      color: #0f172a;
-    }
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: #f3f4f6;
+            border-radius: 8px;
+            color: #6b7280;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.2s;
+        }
 
-    @media (max-width: 480px) {
-      .container {
-        padding: 24px 16px;
-      }
-      .brand-title {
-        font-size: 1.1rem;
-      }
-      .step .step-label {
-        display: none;
-      }
-      .step i {
-        margin-right: 0;
-      }
-      .version-btn {
-        font-size: 0.6rem;
-        padding: 6px 8px;
-      }
-    }
-  </style>
+        .modal-close:hover {
+            background: #e5e7eb;
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        /* DETAIL */
+        .detail-subj {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .detail-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .detail-meta span {
+            font-size: 12px;
+            color: #6b7280;
+            background: #f3f4f6;
+            padding: 4px 12px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .detail-meta span i {
+            color: #4f46e5;
+        }
+
+        /* OTP */
+        .otp-box {
+            background: #eef2ff;
+            border-radius: 10px;
+            padding: 14px 20px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .otp-box .lbl {
+            font-size: 11px;
+            font-weight: 600;
+            color: #4f46e5;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .otp-box .code {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a2e;
+            letter-spacing: 4px;
+        }
+
+        .otp-box .copy-otp {
+            padding: 6px 16px;
+            background: #4f46e5;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .otp-box .copy-otp:hover {
+            background: #4338ca;
+        }
+
+        /* EMAIL CONTENT - LINK BISA DIKLIK */
+        .email-content {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #1a1a2e;
+        }
+
+        .email-content p {
+            margin-bottom: 10px;
+        }
+
+        /* LINK WRAPPER - BISA DIKLIK */
+        .link-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 10px 0;
+            padding: 10px 16px;
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            flex-wrap: wrap;
+            transition: 0.2s;
+        }
+
+        .link-wrap:hover {
+            border-color: #4f46e5;
+            background: #f0f2ff;
+        }
+
+        .link-wrap .link-text {
+            flex: 1;
+            min-width: 60px;
+            word-break: break-all;
+            font-size: 13px;
+        }
+
+        .link-wrap .link-text a {
+            color: #4f46e5;
+            text-decoration: underline;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .link-wrap .link-text a:hover {
+            color: #4338ca;
+        }
+
+        .link-wrap .actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .link-wrap .actions button {
+            padding: 4px 12px;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #6b7280;
+            font-family: inherit;
+        }
+
+        .link-wrap .actions button:hover {
+            background: #4f46e5;
+            color: #fff;
+            border-color: #4f46e5;
+        }
+
+        .link-wrap .actions button.btn-copy-link:hover {
+            background: #059669;
+            border-color: #059669;
+        }
+
+        .link-wrap .actions button.btn-open-link:hover {
+            background: #4f46e5;
+            border-color: #4f46e5;
+        }
+
+        /* TOAST */
+        .toast-stack {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .toast {
+            padding: 10px 18px;
+            background: #1a1a2e;
+            color: #fff;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            animation: slideUp 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .toast.ok {
+            background: #065f46;
+        }
+        .toast.err {
+            background: #991b1b;
+        }
+        .toast.inf {
+            background: #1e40af;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+            .card {
+                padding: 18px 16px;
+            }
+            .email-box {
+                padding: 10px 14px;
+                flex-wrap: wrap;
+            }
+            .email-box .addr {
+                font-size: 13px;
+                min-width: 120px;
+                order: 2;
+                flex: 1 1 100%;
+            }
+            .email-box .icon {
+                order: 1;
+            }
+            .email-box .actions {
+                order: 3;
+            }
+            .btn-row .btn {
+                flex: 1;
+                justify-content: center;
+                padding: 8px 14px;
+                font-size: 12px;
+            }
+            .modal-box {
+                max-width: 100%;
+                margin: 10px;
+            }
+            .modal-body {
+                padding: 16px;
+            }
+            .otp-box .code {
+                font-size: 22px;
+                letter-spacing: 3px;
+            }
+            .link-wrap {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .link-wrap .actions {
+                justify-content: center;
+            }
+            .inbox-header .meta {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <div class="container">
-    <!-- HEADER -->
-    <div class="header">
-      <div class="brand-icon">
-        <i class="fas fa-bolt"></i>
-      </div>
-      <div class="brand-text">
-        <span class="brand-title">Alight Motion</span>
-        <span class="brand-badge"><i class="fas fa-crown"></i> Premium Generator</span>
-      </div>
-    </div>
+    <div class="container">
 
-    <!-- VERSION SELECTOR -->
-    <div class="version-selector">
-      <button class="version-btn active" data-version="v4">V4</button>
-      <button class="version-btn" data-version="v3">V3</button>
-      <button class="version-btn" data-version="v2">V2</button>
-      <button class="version-btn" data-version="v1">V1</button>
-    </div>
-
-    <!-- STEPS -->
-    <div class="steps">
-      <div class="step active" data-step="1">
-        <i class="fas fa-envelope"></i>
-        <span class="step-label">Email</span>
-      </div>
-      <div class="step" data-step="2">
-        <i class="fas fa-crown"></i>
-        <span class="step-label">Premium</span>
-      </div>
-    </div>
-
-    <!-- ALERT INFO -->
-    <div class="alert alert-info" id="infoAlert">
-      <i class="fas fa-circle-info"></i>
-      <span>Masukkan email Alight Motion, kami akan kirim magic link via API DapjiSync.</span>
-    </div>
-
-    <!-- STEP 1: EMAIL -->
-    <div id="step1" class="panel active">
-      <div class="form-group">
-        <label><i class="fas fa-envelope"></i> Email Alight Motion</label>
-        <input type="email" id="emailInput" placeholder="contoh@email.com" autocomplete="email">
-        <div class="helper"><i class="fas fa-arrow-right"></i> Gunakan email yang sudah terdaftar</div>
-      </div>
-      <button class="btn" id="sendBtn">
-        <i class="fas fa-paper-plane"></i> Kirim Magic Link
-      </button>
-      <div class="loading-container" id="loadingStep1">
-        <div class="loading-wave">
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
+        <!-- HEADER -->
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-envelope"></i> Temp<span>Mail</span>
+            </div>
+            <div class="sub">Disposable Temporary Email</div>
         </div>
-        <div class="loading-text">MENGIRIM MAGIC LINK...</div>
-      </div>
-    </div>
 
-    <!-- STEP 2: VERIFIKASI -->
-    <div id="step2" class="panel">
-      <div class="alert alert-warning" id="step2Alert">
-        <i class="fas fa-triangle-exclamation"></i>
-        <span>Buka email (cek spam), klik magic link, <strong>copy seluruh URL</strong> dari browser, lalu paste di bawah.</span>
-      </div>
-      <div class="form-group">
-        <label><i class="fas fa-link"></i> Magic Link URL</label>
-        <input type="url" id="linkInput" placeholder="https://alight-creative.firebaseapp.com/__/auth/...">
-      </div>
-      <button class="btn btn-success" id="verifyBtn">
-        <i class="fas fa-check-circle"></i> Verifikasi & Aktivasi Premium
-      </button>
-      <div class="loading-container" id="loadingStep2">
-        <div class="loading-wave">
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
-          <span class="wave-bar"></span>
+        <!-- CARD -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-at"></i> Your Temporary Email Address
+            </div>
+
+            <div class="email-box">
+                <span class="icon"><i class="fas fa-envelope"></i></span>
+                <input class="addr" id="emailDisplay" placeholder="Generate new address" readonly>
+                <div class="actions">
+                    <button onclick="copyEmail()" id="copyBtn" disabled title="Copy email">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <button onclick="refreshInbox()" id="refBtn" disabled title="Refresh inbox">
+                        <i class="fas fa-sync" id="refIcon"></i>
+                    </button>
+                    <button onclick="deleteAccount()" id="delBtn" disabled title="Delete mailbox" style="color:#dc2626;">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-primary" id="genBtn" onclick="generateEmail()">
+                    <i class="fas fa-plus"></i> Generate
+                </button>
+                <button class="btn btn-outline" onclick="refreshInbox()" id="refBtn2" disabled>
+                    <i class="fas fa-sync"></i> Refresh
+                </button>
+            </div>
         </div>
-        <div class="loading-text">MEMVERIFIKASI & MENGAKTIFKAN...</div>
-      </div>
-      <div class="row-btns">
-        <button class="btn btn-secondary" id="backBtn">
-          <i class="fas fa-arrow-left"></i> Kembali
-        </button>
-        <button class="btn btn-secondary" id="resetBtn">
-          <i class="fas fa-rotate-left"></i> Ulang
-        </button>
-      </div>
+
+        <!-- INBOX -->
+        <div class="card" style="padding: 20px 24px;">
+            <div class="inbox-header">
+                <div class="left">
+                    <h2>Inbox</h2>
+                    <span class="count" id="msgCount">0</span>
+                </div>
+                <span class="meta" id="lastRef">Waiting...</span>
+            </div>
+
+            <div class="msg-list" id="msgList">
+                <div class="empty">
+                    <div class="icon"><i class="fas fa-inbox"></i></div>
+                    <h3>Your inbox is empty</h3>
+                    <p>Waiting for incoming emails</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center;padding:20px 0 10px;font-size:12px;color:#9ca3af;">
+            <p>Forget about spam. Keep your real mailbox clean and secure.</p>
+        </div>
     </div>
 
-    <!-- STEP 3: SUCCESS -->
-    <div id="step3" class="panel">
-      <div class="alert alert-success">
-        <i class="fas fa-circle-check"></i>
-        <span><strong>✅ Premium Aktif!</strong> Buka Alight Motion dan nikmati semua fitur premium.</span>
-      </div>
-      <button class="btn" id="resetSuccessBtn">
-        <i class="fas fa-rotate-left"></i> Buat Lagi
-      </button>
+    <!-- MODAL -->
+    <div class="modal" id="modalBg">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h3><i class="fas fa-envelope" style="color:#4f46e5;"></i> Message</h3>
+                <button class="modal-close" onclick="closeModal()"><i class="fas fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
     </div>
 
-    <!-- FOOTER -->
-    <div class="footer">
-      <i class="far fa-copyright"></i> 2026 DapjiSync • 
-      <a href="#" onclick="event.preventDefault();">Tutorial</a> • 
-      <i class="fas fa-bolt" style="color:#fbbf24;"></i> API v1
-    </div>
-  </div>
+    <!-- TOAST -->
+    <div class="toast-stack" id="toastStack"></div>
 
-  <script>
-    (function() {
-      'use strict';
+    <script>
+        const TEMPY_API = 'https://tempy.email/api/v1';
 
-      const API_BASE = 'https://api.ykzynekoo.my.id';
-      let currentVersion = 'v4';
+        let account = null;
+        let messages = [];
+        let refreshTimer = null;
+        let isGenerating = false;
 
-      // DOM refs
-      const step1Panel = document.getElementById('step1');
-      const step2Panel = document.getElementById('step2');
-      const step3Panel = document.getElementById('step3');
-      const steps = document.querySelectorAll('.step');
-      const emailInput = document.getElementById('emailInput');
-      const linkInput = document.getElementById('linkInput');
-      const sendBtn = document.getElementById('sendBtn');
-      const verifyBtn = document.getElementById('verifyBtn');
-      const backBtn = document.getElementById('backBtn');
-      const resetBtn = document.getElementById('resetBtn');
-      const resetSuccessBtn = document.getElementById('resetSuccessBtn');
-      const load1 = document.getElementById('loadingStep1');
-      const load2 = document.getElementById('loadingStep2');
-      const step2Alert = document.getElementById('step2Alert');
-      const infoAlert = document.getElementById('infoAlert');
-      const versionBtns = document.querySelectorAll('.version-btn');
+        /* =========================================================
+           API
+           ========================================================= */
+        const API = {
+            async request(url, options = {}) {
+                const res = await fetch(url, {
+                    ...options,
+                    headers: { 'Accept': 'application/json', ...(options.headers || {}) }
+                });
+                let data = null;
+                const text = await res.text();
+                if (text) { try { data = JSON.parse(text); } catch { data = text; } }
+                if (!res.ok) {
+                    let msg = 'HTTP ' + res.status;
+                    if (data) {
+                        if (typeof data === 'string') msg += ': ' + data.slice(0, 150);
+                        else if (data.error) msg += ': ' + data.error;
+                        else if (data.message) msg += ': ' + data.message;
+                    }
+                    throw new Error(msg);
+                }
+                return data;
+            },
+            createMailbox() { return this.request(TEMPY_API + '/mailbox', { method: 'POST' }); },
+            getMessages(email) { return this.request(TEMPY_API + '/mailbox/' + encodeURIComponent(email) + '/messages'); },
+            getMailbox(email) { return this.request(TEMPY_API + '/mailbox/' + encodeURIComponent(email)); },
+            deleteMailbox(email) { return this.request(TEMPY_API + '/mailbox/' + encodeURIComponent(email), { method: 'DELETE' }); }
+        };
 
-      // ===================== VERSION SELECTOR =====================
+        /* =========================================================
+           GENERATE
+           ========================================================= */
+        async function generateEmail() {
+            if (isGenerating) return;
+            if (account) {
+                if (!confirm('Buat email baru? Email lama akan dihapus.')) return;
+                try { await API.deleteMailbox(account.email); } catch (e) {}
+                clearSession(false);
+            }
 
-      versionBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-          versionBtns.forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
-          currentVersion = this.dataset.version;
+            const btn = document.getElementById('genBtn');
+            const orig = btn.innerHTML;
+            btn.disabled = true;
+            isGenerating = true;
+            btn.innerHTML = '<span class="spinner"></span> Creating...';
 
-          // Update alert info
-          if (infoAlert) {
-            infoAlert.innerHTML = `
-              <i class="fas fa-circle-info"></i>
-              <span>Menggunakan <strong>Generator ${currentVersion.toUpperCase()}</strong>. Masukkan email Alight Motion untuk aktivasi premium.</span>
-            `;
-          }
-
-          resetAll();
-        });
-      });
-
-      // ===================== API FUNCTIONS =====================
-
-      async function sendMagicLink(email) {
-        let endpoint;
-
-        if (currentVersion === 'v4') {
-          endpoint = `${API_BASE}/api/lightmotion/v4/magic-link`;
-        } else if (currentVersion === 'v3') {
-          endpoint = `${API_BASE}/api/lightmotion/v3/magic-link`;
-        } else if (currentVersion === 'v2') {
-          endpoint = `${API_BASE}/api/lightmotion/v2/magic-link`;
-        } else if (currentVersion === 'v1') {
-          endpoint = `${API_BASE}/api/lightmotion/v1/magic-link`;
+            try {
+                const result = await API.createMailbox();
+                if (!result?.email) throw new Error('API tidak mengembalikan email');
+                account = { email: result.email, webUrl: result.webUrl || null, expiresAt: result.expiresAt || null,
+                    createdAt: Date.now() };
+                messages = [];
+                localStorage.setItem('neonmail_session', JSON.stringify(account));
+                updateUI();
+                toast('Generated: ' + account.email, 'ok');
+                renderMessages();
+                await refreshInbox();
+            } catch (e) {
+                toast('Generate failed: ' + e.message, 'err');
+            } finally {
+                btn.disabled = false;
+                isGenerating = false;
+                btn.innerHTML = orig;
+            }
         }
 
-        const response = await fetch(endpoint, {
-          method: currentVersion === 'v4' ? 'POST' : 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: currentVersion === 'v4' ? JSON.stringify({ email: email }) : undefined
+        /* =========================================================
+           RESTORE SESSION
+           ========================================================= */
+        document.addEventListener('DOMContentLoaded', async function() {
+            const saved = localStorage.getItem('neonmail_session');
+            if (!saved) return;
+            try {
+                const data = JSON.parse(saved);
+                if (data?.email) {
+                    account = data;
+                    updateUI();
+                    toast('Session restored', 'inf');
+                    try {
+                        await API.getMailbox(account.email);
+                        await refreshInbox();
+                    } catch (e) {
+                        if (/404|expired|deactivated/i.test(e.message)) {
+                            toast('Mailbox expired', 'err');
+                            clearSession(false);
+                        }
+                    }
+                }
+            } catch (e) { localStorage.removeItem('neonmail_session'); }
         });
 
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.message || 'Gagal mengirim magic link');
+        /* =========================================================
+           UI
+           ========================================================= */
+        function updateUI() {
+            const el = document.getElementById('emailDisplay');
+            el.value = account.email;
+            document.getElementById('copyBtn').disabled = false;
+            document.getElementById('refBtn').disabled = false;
+            document.getElementById('refBtn2').disabled = false;
+            document.getElementById('delBtn').disabled = false;
         }
 
-        return data;
-      }
-
-      async function verifyAndActivate(link) {
-        let endpoint;
-
-        if (currentVersion === 'v4') {
-          endpoint = `${API_BASE}/api/lightmotion/v4/verify`;
-        } else if (currentVersion === 'v3') {
-          endpoint = `${API_BASE}/api/lightmotion/v3/applyPremium`;
-        } else if (currentVersion === 'v2') {
-          endpoint = `${API_BASE}/api/lightmotion/v2/applyPremium`;
-        } else if (currentVersion === 'v1') {
-          endpoint = `${API_BASE}/api/lightmotion/v1/applyPremium`;
+        /* =========================================================
+           REFRESH
+           ========================================================= */
+        async function refreshInbox() {
+            if (!account?.email) { toast('No active session', 'err'); return; }
+            const icon = document.getElementById('refIcon');
+            icon.classList.add('fa-spin');
+            try {
+                const data = await API.getMessages(account.email);
+                messages = Array.isArray(data) ? data : (data?.messages || data?.emails || data?.data || []);
+                renderMessages();
+                document.getElementById('msgCount').textContent = messages.length;
+                document.getElementById('lastRef').textContent = 'Updated: ' + new Date().toLocaleTimeString('id-ID', { hour: '2-digit',
+                    minute: '2-digit' });
+                if (messages.length) toast(messages.length + ' message' + (messages.length > 1 ? 's' : '') + ' received', 'inf');
+            } catch (e) {
+                if (/404|expired|deactivated/i.test(e.message)) {
+                    toast('Mailbox expired', 'err');
+                    clearSession(false);
+                } else {
+                    toast('Refresh failed: ' + e.message, 'err');
+                }
+            } finally {
+                icon.classList.remove('fa-spin');
+            }
         }
 
-        const response = await fetch(endpoint, {
-          method: currentVersion === 'v4' ? 'POST' : 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: currentVersion === 'v4' ? JSON.stringify({ link: link }) : undefined
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.message || 'Gagal mengaktifkan premium');
+        /* =========================================================
+           RENDER MESSAGES
+           ========================================================= */
+        function renderMessages() {
+            const container = document.getElementById('msgList');
+            document.getElementById('msgCount').textContent = messages.length || 0;
+            if (!messages?.length) {
+                container.innerHTML =
+                    `<div class="empty"><div class="icon"><i class="fas fa-inbox"></i></div><h3>Your inbox is empty</h3><p>Waiting for incoming emails</p></div>`;
+                return;
+            }
+            container.innerHTML = messages.map((msg, i) => {
+                const from = cleanFromName(getFrom(msg));
+                const subj = getSubject(msg);
+                const body = getBody(msg);
+                const otp = extractOTP(subj + ' ' + body);
+                const time = formatDate(getDate(msg));
+                return `<div class="msg-item" onclick="openMessage(${i})">
+              <div class="avatar">${esc(from.charAt(0) || '?').toUpperCase()}</div>
+              <div class="body">
+                <div class="top">
+                  <span class="from">${esc(from)}</span>
+                  <span class="time">${esc(time)}</span>
+                </div>
+                <div class="subj">${esc(subj)}</div>
+                <div class="preview">${esc(body.slice(0, 160))}</div>
+                ${otp ? `<div class="otp-badge"><i class="fas fa-shield-halved"></i> OTP: ${esc(otp)}</div>` : ''}
+              </div>
+            </div>`;
+            }).join('');
         }
 
-        return data;
-      }
+        function getFrom(m) { return m?.from || m?.sender || 'Unknown'; }
 
-      // ===================== UI CONTROLLER =====================
+        function getSubject(m) { return String(m?.subject || m?.title || 'No Subject'); }
 
-      function setStep(num) {
-        steps.forEach((el, i) => {
-          el.classList.toggle('active', i + 1 === num);
-        });
-        step1Panel.classList.toggle('active', num === 1);
-        step2Panel.classList.toggle('active', num === 2);
-        step3Panel.classList.toggle('active', num === 3);
-        load1.classList.remove('show');
-        load2.classList.remove('show');
-      }
+        function getBody(m) { return String(m?.body_text || m?.bodyText || m?.text || m?.body || m?.content || m?.preview ||
+                ''); }
 
-      function resetAll() {
-        setStep(1);
-        emailInput.value = '';
-        linkInput.value = '';
-        sendBtn.disabled = false;
-        verifyBtn.disabled = false;
+        function getDate(m) { return m?.received_at || m?.receivedAt || m?.created_at || m?.createdAt || m?.date || ''; }
 
-        if (step2Alert) {
-          step2Alert.innerHTML = `
-            <i class="fas fa-triangle-exclamation"></i>
-            <span>Buka email (cek spam), klik magic link, <strong>copy seluruh URL</strong> dari browser, lalu paste di bawah.</span>
+        function cleanFromName(f) {
+            if (!f) return 'Unknown';
+            const m = String(f).match(/^"?([^"<]+)"?\s*(?:<.*>)?$/);
+            return m ? m[1].trim() || f : String(f).replace(/<[^>]+>/g, '').trim() || String(f);
+        }
+
+        function formatDate(d) {
+            if (!d) return 'Unknown';
+            const dt = new Date(d);
+            return isNaN(dt.getTime()) ? String(d) : dt.toLocaleString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit',
+                minute: '2-digit' });
+        }
+
+        function formatLongDate(d) {
+            if (!d) return 'Unknown';
+            const dt = new Date(d);
+            return isNaN(dt.getTime()) ? String(d) : dt.toLocaleString('id-ID', { weekday: 'long', day: 'numeric',
+                month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+
+        function extractOTP(text) {
+            if (!text) return null;
+            const m = text.match(/\b\d{4,8}\b/);
+            return m ? m[0] : null;
+        }
+
+        /* =========================================================
+           OPEN MESSAGE - BIKIN LINK KLIKABLE
+           ========================================================= */
+        function openMessage(index) {
+            const msg = messages[index];
+            if (!msg) { toast('Message not found', 'err'); return; }
+
+            const from = cleanFromName(getFrom(msg));
+            const subj = getSubject(msg);
+            const body = getBody(msg);
+            const html = msg?.body_html || msg?.bodyHtml || msg?.html || null;
+            const otp = extractOTP(subj + ' ' + body);
+
+            let htmlContent = '';
+
+            if (html) {
+                let clean = stripDanger(html);
+                clean = processHtmlLinks(clean);
+                htmlContent = `<div class="email-content">${clean}</div>`;
+            } else {
+                // PLAIN TEXT -> BIKIN LINK KLIKABLE
+                let text = esc(body || 'No content');
+                text = processPlainTextLinks(text);
+                htmlContent = `<div class="email-content">${text}</div>`;
+            }
+
+            document.getElementById('modalBody').innerHTML = `
+            <div class="detail-subj">${esc(subj)}</div>
+            <div class="detail-meta">
+              <span><i class="fas fa-user"></i> ${esc(from)}</span>
+              <span><i class="fas fa-clock"></i> ${esc(formatLongDate(getDate(msg)))}</span>
+              <span><i class="fas fa-tag"></i> ${esc(account.email)}</span>
+            </div>
+            ${otp ? `<div class="otp-box"><div><div class="lbl">Detected OTP</div><div class="code">${esc(otp)}</div></div><button class="copy-otp" onclick="copyOTP('${escJs(otp)}')"><i class="fas fa-copy"></i> Copy</button></div>` : ''}
+            ${htmlContent}
           `;
-        }
-      }
 
-      // ===================== EVENT LISTENERS =====================
-
-      // Kirim Magic Link
-      sendBtn.addEventListener('click', async function() {
-        const email = emailInput.value.trim();
-
-        if (!email || !email.includes('@')) {
-          alert('Masukkan email yang valid.');
-          return;
+            document.getElementById('modalBg').classList.add('open');
         }
 
-        sendBtn.disabled = true;
-        load1.classList.add('show');
+        /* =========================================================
+           PROSES PLAIN TEXT -> BIKIN LINK KLIKABLE
+           ========================================================= */
+        function processPlainTextLinks(text) {
+            let processed = text;
 
-        try {
-          const result = await sendMagicLink(email);
-          load1.classList.remove('show');
-          sendBtn.disabled = false;
+            // 1. Cari URL mentah: https://...
+            processed = processed.replace(/(https?:\/\/[^\s<>"']+)/gi, function(url) {
+                return `<div class="link-wrap">
+              <div class="link-text"><a href="${esc(url)}" target="_blank" rel="noopener">${esc(url)}</a></div>
+              <div class="actions">
+                <button class="btn-open-link" onclick="event.stopPropagation(); openLink('${escJs(url)}')"><i class="fas fa-external-link-alt"></i> Buka</button>
+                <button class="btn-copy-link" onclick="event.stopPropagation(); copyLink('${escJs(url)}')"><i class="fas fa-copy"></i> Salin</button>
+              </div>
+            </div>`;
+            });
 
-          setStep(2);
-          if (step2Alert) {
-            step2Alert.innerHTML = `
-              <i class="fas fa-check-circle" style="color:#0d9488;"></i>
-              <span>Magic link terkirim ke <strong>${email}</strong> (${currentVersion.toUpperCase()}). Cek spam, klik link, copy URL-nya.</span>
-            `;
-          }
-        } catch (error) {
-          load1.classList.remove('show');
-          sendBtn.disabled = false;
-          alert('Gagal mengirim magic link: ' + error.message);
+            // 2. Cari pola: "Sign in to Alight Creative" diikuti URL di dekatnya
+            // Contoh: "click this link: Sign in to Alight Creative https://..."
+            const patterns = [
+                /(?:click|follow|visit|open|go to)\s+(?:this\s+)?(?:link|url)?\s*:?\s*([^:\n]*?)(https?:\/\/[^\s<>"']+)/gi,
+                /([^(\n]*?)\(?(https?:\/\/[^\s<>"']+)\)?/gi,
+                /([^-\n]*?)\s*[-–—]\s*(https?:\/\/[^\s<>"']+)/gi,
+            ];
+
+            patterns.forEach(pattern => {
+                processed = processed.replace(pattern, function(match, label, url) {
+                    let cleanLabel = label ? label.trim() : 'Link';
+                    if (!cleanLabel || cleanLabel.length < 2) cleanLabel = url;
+                    if (match.includes('link-wrap')) return match;
+                    return `<div class="link-wrap">
+                <div class="link-text"><a href="${esc(url)}" target="_blank" rel="noopener">${esc(cleanLabel)}</a></div>
+                <div class="actions">
+                  <button class="btn-open-link" onclick="event.stopPropagation(); openLink('${escJs(url)}')"><i class="fas fa-external-link-alt"></i> Buka</button>
+                  <button class="btn-copy-link" onclick="event.stopPropagation(); copyLink('${escJs(url)}')"><i class="fas fa-copy"></i> Salin</button>
+                </div>
+              </div>`;
+                });
+            });
+
+            // 3. Cari teks yang mirip link: "Sign in to Alight Creative" (tanpa URL)
+            // Ini agak tricky, kita skip karena tanpa URL gak bisa dibuat link
+
+            return processed;
         }
-      });
 
-      // Verifikasi & Aktivasi
-      verifyBtn.addEventListener('click', async function() {
-        const link = linkInput.value.trim();
+        /* =========================================================
+           PROSES HTML LINK
+           ========================================================= */
+        function processHtmlLinks(html) {
+            let processed = html.replace(/<a\s+([^>]*href=["']([^"']*)["'][^>]*)>(.*?)<\/a>/gi, function(m, attrs, href, text) {
+                if (!href || href === '#' || href.trim() === '') return m;
+                return `<div class="link-wrap">
+              <div class="link-text"><a href="${esc(href)}" target="_blank" rel="noopener">${text || esc(href)}</a></div>
+              <div class="actions">
+                <button class="btn-open-link" onclick="event.stopPropagation(); openLink('${escJs(href)}')"><i class="fas fa-external-link-alt"></i> Buka</button>
+                <button class="btn-copy-link" onclick="event.stopPropagation(); copyLink('${escJs(href)}')"><i class="fas fa-copy"></i> Salin</button>
+              </div>
+            </div>`;
+            });
 
-        if (!link || !link.startsWith('https://')) {
-          alert('Paste URL magic link yang valid (mulai dengan https://).');
-          return;
+            // Juga detect URL mentah
+            processed = processed.replace(/(https?:\/\/[^\s<>"']+)/gi, function(url) {
+                if (url.match(/href=/i) || url.match(/link-wrap/)) return url;
+                return `<div class="link-wrap">
+              <div class="link-text"><a href="${esc(url)}" target="_blank" rel="noopener">${esc(url)}</a></div>
+              <div class="actions">
+                <button class="btn-open-link" onclick="event.stopPropagation(); openLink('${escJs(url)}')"><i class="fas fa-external-link-alt"></i> Buka</button>
+                <button class="btn-copy-link" onclick="event.stopPropagation(); copyLink('${escJs(url)}')"><i class="fas fa-copy"></i> Salin</button>
+              </div>
+            </div>`;
+            });
+
+            return processed;
         }
 
-        verifyBtn.disabled = true;
-        load2.classList.add('show');
-
-        try {
-          const result = await verifyAndActivate(link);
-          load2.classList.remove('show');
-          verifyBtn.disabled = false;
-
-          setStep(3);
-          linkInput.value = '';
-        } catch (error) {
-          load2.classList.remove('show');
-          verifyBtn.disabled = false;
-          alert('Gagal aktivasi: ' + error.message);
+        /* =========================================================
+           LINK FUNCTIONS
+           ========================================================= */
+        function openLink(url) {
+            if (url) window.open(url, '_blank', 'noopener,noreferrer');
         }
-      });
 
-      // Back
-      backBtn.addEventListener('click', function() {
-        setStep(1);
-      });
+        async function copyLink(url) {
+            if (!url) { toast('Tidak ada link', 'err'); return; }
+            try {
+                await navigator.clipboard.writeText(url);
+                toast('✅ Link disalin!', 'ok');
+            } catch (e) {
+                const ta = document.createElement('textarea');
+                ta.value = url;
+                ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                toast('✅ Link disalin!', 'ok');
+            }
+        }
 
-      // Reset dari step 2
-      resetBtn.addEventListener('click', resetAll);
+        /* =========================================================
+           COPY FUNCTIONS
+           ========================================================= */
+        async function copyEmail() {
+            if (!account) return;
+            try {
+                await navigator.clipboard.writeText(account.email);
+                toast('✅ Email copied!', 'ok');
+            } catch (e) { toast('Copy failed', 'err'); }
+        }
 
-      // Reset dari success
-      resetSuccessBtn.addEventListener('click', resetAll);
+        async function copyOTP(otp) {
+            try {
+                await navigator.clipboard.writeText(otp);
+                toast('✅ OTP copied!', 'ok');
+            } catch (e) { toast('Copy failed', 'err'); }
+        }
 
-      // Initial state
-      setStep(1);
+        /* =========================================================
+           DELETE
+           ========================================================= */
+        async function deleteAccount() {
+            if (!account) return;
+            if (!confirm('Hapus email ini? Semua data akan hilang.')) return;
+            const btn = document.getElementById('delBtn');
+            btn.disabled = true;
+            try { await API.deleteMailbox(account.email); } catch (e) {}
+            clearSession(true);
+            toast('Address terminated', 'ok');
+        }
 
-      console.log('✅ Alight Motion Premium Generator loaded');
-      console.log('📡 API:', API_BASE);
-      console.log('📌 Version:', currentVersion);
+        /* =========================================================
+           CLEAR
+           ========================================================= */
+        function clearSession(showToast = false) {
+            account = null;
+            messages = [];
+            if (refreshTimer) { clearInterval(refreshTimer);
+                refreshTimer = null; }
+            localStorage.removeItem('neonmail_session');
+            document.getElementById('emailDisplay').value = 'Generate new address';
+            document.getElementById('copyBtn').disabled = true;
+            document.getElementById('refBtn').disabled = true;
+            document.getElementById('refBtn2').disabled = true;
+            document.getElementById('delBtn').disabled = true;
+            document.getElementById('msgCount').textContent = '0';
+            document.getElementById('lastRef').textContent = 'Waiting...';
+            renderMessages();
+            if (showToast) toast('Session cleared', 'ok');
+        }
 
-    })();
-  </script>
+        /* =========================================================
+           AUTO REFRESH
+           ========================================================= */
+        function startAutoRefresh() {
+            if (refreshTimer) clearInterval(refreshTimer);
+            refreshTimer = setInterval(() => { if (account && !document.hidden) refreshInbox(); }, 12000);
+        }
+        startAutoRefresh();
+
+        /* =========================================================
+           MODAL
+           ========================================================= */
+        function closeModal() { document.getElementById('modalBg').classList.remove('open'); }
+        document.getElementById('modalBg').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+            if (e.ctrlKey && e.key === 'r') {
+                e.preventDefault();
+                if (account) refreshInbox();
+            }
+        });
+
+        /* =========================================================
+           HELPERS
+           ========================================================= */
+        function esc(text) {
+            if (text == null) return '';
+            const d = document.createElement('div');
+            d.textContent = String(text);
+            return d.innerHTML;
+        }
+
+        function escJs(text) { return String(text).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\r/g, '\\r')
+            .replace(/\n/g, '\\n'); }
+
+        function stripDanger(html) {
+            return String(html)
+                .replace(/<script[\s\S]*?<\/script>/gi, '')
+                .replace(/<style[\s\S]*?<\/style>/gi, '')
+                .replace(/<iframe[\s\S]*?<\/iframe>/gi, '')
+                .replace(/<object[\s\S]*?<\/object>/gi, '')
+                .replace(/<embed[\s\S]*?<\/embed>/gi, '')
+                .replace(/<form[\s\S]*?<\/form>/gi, '')
+                .replace(/on\w+="[^"]*"/gi, '')
+                .replace(/on\w+='[^']*'/gi, '');
+        }
+
+        /* =========================================================
+           TOAST
+           ========================================================= */
+        function toast(message, type = 'inf') {
+            const stack = document.getElementById('toastStack');
+            const el = document.createElement('div');
+            el.className = 'toast ' + type;
+            const icons = { ok: 'fa-check-circle', err: 'fa-times-circle', inf: 'fa-info-circle' };
+            el.innerHTML = '<i class="fas ' + (icons[type] || icons.inf) + '"></i> ' + message;
+            stack.appendChild(el);
+            setTimeout(() => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(-10px)';
+                setTimeout(() => { if (el.parentNode) el.remove(); }, 300);
+            }, 3500);
+        }
+    </script>
 
 </body>
 </html>
